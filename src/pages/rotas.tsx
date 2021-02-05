@@ -22,7 +22,7 @@ const AppStack = createStackNavigator()
 export default function Rotas(){
     return (
         <NavigationContainer>
-            <AppStack.Navigator>
+            <AppStack.Navigator screenOptions={{ headerShown: false }}>
                 <AppStack.Screen name="login" component={Login}/>
                 <AppStack.Screen name="home" component={Home}/>
                 <AppStack.Screen name="perfil" component={Perfil}/>
