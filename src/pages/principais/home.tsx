@@ -3,12 +3,13 @@ import { View, Text, Button } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
 import textStyle from '../../styles/text'
+import { pagesNames } from '../rotas'
 
 export default function Home(){
     const navigation = useNavigation()
 
     function navigateToLogin(){
-        navigation.navigate('login')
+        navigation.navigate(pagesNames.login)
     }
 
     return (

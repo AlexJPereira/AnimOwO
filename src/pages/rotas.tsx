@@ -19,21 +19,35 @@ import PlanoAssistir from './listas/plano-assistir'
 
 const AppStack = createStackNavigator()
 
+export const pagesNames = {
+    login: "login",
+    home: "home",
+    perfil: "perfil",
+    animePage: "anime-page",
+    configuracoes: "configuracoes",
+    downloads: "downloads",
+    listaCompleta: "lista-completa",
+    sobre: "sobre",
+    assistindo: "assistindo",
+    favoritos: "favoritos",
+    planoAssistir: "plano-assistir"
+}
+
 export default function Rotas(){
     return (
         <NavigationContainer>
             <AppStack.Navigator screenOptions={{ headerShown: false }}>
-                <AppStack.Screen name="login" component={Login}/>
-                <AppStack.Screen name="home" component={Home}/>
-                <AppStack.Screen name="perfil" component={Perfil}/>
-                <AppStack.Screen name="anime-page" component={AnimePage}/>
-                <AppStack.Screen name="configuracoes" component={Configuracoes}/>
-                <AppStack.Screen name="downloads" component={Downloads}/>
-                <AppStack.Screen name="lista-completa" component={ListaCompleta}/>
-                <AppStack.Screen name="sobre" component={Sobre}/>
-                <AppStack.Screen name="assistindo" component={Assistindo}/>
-                <AppStack.Screen name="favoritos" component={Favoritos}/>
-                <AppStack.Screen name="plano-assistir" component={PlanoAssistir}/>
+                <AppStack.Screen name={pagesNames.login} component={Login}/>
+                <AppStack.Screen name={pagesNames.home} component={Home}/>
+                <AppStack.Screen name={pagesNames.perfil} component={Perfil}/>
+                <AppStack.Screen name={pagesNames.animePage} component={AnimePage}/>
+                <AppStack.Screen name={pagesNames.configuracoes} component={Configuracoes}/>
+                <AppStack.Screen name={pagesNames.downloads} component={Downloads}/>
+                <AppStack.Screen name={pagesNames.listaCompleta} component={ListaCompleta}/>
+                <AppStack.Screen name={pagesNames.sobre} component={Sobre}/>
+                <AppStack.Screen name={pagesNames.assistindo} component={Assistindo}/>
+                <AppStack.Screen name={pagesNames.favoritos} component={Favoritos}/>
+                <AppStack.Screen name={pagesNames.planoAssistir} component={PlanoAssistir}/>
             </AppStack.Navigator>
         </NavigationContainer>
     )
