@@ -1,6 +1,9 @@
 import React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'; 
 import { createStackNavigator } from '@react-navigation/stack'
+import { Ionicons } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons'; 
 
 // paginas
 import Login from './principais/login'
@@ -18,6 +21,7 @@ import Favoritos from './listas/favoritos'
 import PlanoAssistir from './listas/plano-assistir'
 
 const AppStack = createStackNavigator()
+const Tab = createBottomTabNavigator()
 
 export const pagesNames = {
     login: "login",
@@ -33,7 +37,71 @@ export const pagesNames = {
     planoAssistir: "plano-assistir"
 }
 
-export default function Rotas(){
+interface barProps {
+    color: string; 
+    size: number; 
+}
+
+export function TabNavigator(){
+    return (
+        <NavigationContainer>
+            <Tab.Navigator
+                initialRouteName={'Home'}
+                tabBarOptions={{
+                showLabel: false,
+                activeTintColor: '#AB3962',
+                inactiveTintColor: '#ffffff',
+                activeBackgroundColor: '#252121',
+                inactiveBackgroundColor: '#252121',
+                style: {
+                        backgroundColor: '#252121',
+                        paddingBottom: 3
+                }
+                }}
+            
+            >
+                <Tab.Screen
+                name={pagesNames.home}
+                component={Home}
+                options={{
+                    tabBarIcon: ({color, size} : barProps) => (
+                    <Ionicons name="home-sharp" size={size} color={color} />
+                    ),
+                }}
+                />
+                <Tab.Screen
+                name={pagesNames.assistindo}
+                component={Assistindo}
+                options={{
+                    tabBarIcon: ({color, size} : barProps) => (
+                    <MaterialIcons name="tv" size={size} color={color} />
+                    ),
+                }}
+                />
+                <Tab.Screen
+                name={pagesNames.planoAssistir}
+                component={PlanoAssistir}
+                options={{
+                    tabBarIcon: ({color, size} : barProps) => (
+                    <Ionicons name="list-circle" size={size} color={color} />
+                    ),
+                }}
+                />
+                <Tab.Screen
+                name={pagesNames.favoritos}
+                component={Favoritos}
+                options={{
+                    tabBarIcon: ({color, size} : barProps) => (
+                    <Ionicons name="md-heart" size={size} color={color} />
+                    ),
+                }}
+                />
+            </Tab.Navigator>
+            </NavigationContainer>
+    )
+}
+
+export function StackNavigator(){
     return (
         <NavigationContainer>
             <AppStack.Navigator screenOptions={{ headerShown: false }}>
