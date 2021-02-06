@@ -44,7 +44,7 @@ interface barProps {
 
 export function TabNavigator(){
     return (
-        <NavigationContainer>
+        <NavigationContainer independent={true}>
             <Tab.Navigator
                 initialRouteName={'Home'}
                 tabBarOptions={{
@@ -74,7 +74,7 @@ export function TabNavigator(){
                 component={Assistindo}
                 options={{
                     tabBarIcon: ({color, size} : barProps) => (
-                    <MaterialIcons name="tv" size={size} color={color} />
+                    <MaterialIcons name="live-tv" size={size} color={color} />
                     ),
                 }}
                 />
@@ -97,7 +97,7 @@ export function TabNavigator(){
                 }}
                 />
             </Tab.Navigator>
-            </NavigationContainer>
+        </NavigationContainer>
     )
 }
 
@@ -106,7 +106,7 @@ export function StackNavigator(){
         <NavigationContainer>
             <AppStack.Navigator screenOptions={{ headerShown: false }}>
                 <AppStack.Screen name={pagesNames.login} component={Login}/>
-                <AppStack.Screen name={pagesNames.home} component={Home}/>
+                <AppStack.Screen name={pagesNames.home} component={TabNavigator}/>
                 <AppStack.Screen name={pagesNames.perfil} component={Perfil}/>
                 <AppStack.Screen name={pagesNames.animePage} component={AnimePage}/>
                 <AppStack.Screen name={pagesNames.configuracoes} component={Configuracoes}/>
