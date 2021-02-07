@@ -4,6 +4,13 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack'
 import { Ionicons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons'; 
+import { FontAwesome5 } from '@expo/vector-icons';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import {useRoute} from '@react-navigation/native'; 
+
+// estilos
+import pagesNames from './pagesNames'
+import colorStyle from '../styles/color'
 
 // paginas
 import Login from './principais/login'
@@ -20,31 +27,36 @@ import Assistindo from './listas/assistindo'
 import Favoritos from './listas/favoritos'
 import PlanoAssistir from './listas/plano-assistir'
 
+// componentes
+import Menu from '../components/menu'
+
 const AppStack = createStackNavigator()
 const Tab = createBottomTabNavigator()
-
-export const pagesNames = {
-    login: "login",
-    home: "home",
-    perfil: "perfil",
-    animePage: "anime-page",
-    configuracoes: "configuracoes",
-    downloads: "downloads",
-    listaCompleta: "lista-completa",
-    sobre: "sobre",
-    assistindo: "assistindo",
-    favoritos: "favoritos",
-    planoAssistir: "plano-assistir"
-}
+const Drawer = createDrawerNavigator();
 
 interface barProps {
     color: string; 
     size: number; 
 }
 
+const MyTheme = {
+    dark: false,
+    colors: {
+      primary: "#FFFFFF",
+      background: colorStyle.corBackground.color,
+      card: colorStyle.corBackground.color, 
+      text: "#FFFFFF",
+      border: colorStyle.corBackground.color, 
+      notification: colorStyle.corBackground.color,
+    },
+};
+
+
 export function TabNavigator(){
+    const route = useRoute();
+
     return (
-        <NavigationContainer independent={true}>
+        <NavigationContainer theme={MyTheme} independent={true}>
             <Tab.Navigator
                 initialRouteName={'Home'}
                 tabBarOptions={{
@@ -83,7 +95,7 @@ export function TabNavigator(){
                 component={PlanoAssistir}
                 options={{
                     tabBarIcon: ({color, size} : barProps) => (
-                    <Ionicons name="list-circle" size={size} color={color} />
+                    <FontAwesome5 name="list-alt" size={size} color={color} />
                     ),
                 }}
                 />
@@ -96,6 +108,16 @@ export function TabNavigator(){
                     ),
                 }}
                 />
+                
+                <Tab.Screen
+                name={pagesNames.menu}
+                component={Menu}
+                options={{
+                    tabBarIcon: ({color, size} : barProps) => (
+                    <Ionicons name="md-menu" size={size} color={color} />
+                    ),
+                }}
+                />
             </Tab.Navigator>
         </NavigationContainer>
     )
@@ -103,7 +125,7 @@ export function TabNavigator(){
 
 export function StackNavigator(){
     return (
-        <NavigationContainer>
+        <NavigationContainer theme={MyTheme}>
             <AppStack.Navigator screenOptions={{ headerShown: false }}>
                 <AppStack.Screen name={pagesNames.login} component={Login}/>
                 <AppStack.Screen name={pagesNames.home} component={TabNavigator}/>
