@@ -1,21 +1,37 @@
 import React from 'react'
-import { View, Text, Button } from 'react-native'
-import { useNavigation } from '@react-navigation/native'
+import { ScrollView, View, StyleSheet } from 'react-native'
 
-import textStyle from '../../styles/text'
-import { pagesNames } from '../rotas'
+import NavBar from '../../components/navBar'
+//import AnimeHorizontalList from '../../components/anime-horizontal-list'
+import AnimeHorizontalListTest from '../../components/anime-horizontal-list-test'
+import LinkSetinha from '../../components/link-setinha'
+
+const FMA = require('../../app-assets/animes-tests/fma.jpg')
 
 export default function Home(){
-    const navigation = useNavigation()
-
-    function navigateToLogin(){
-        navigation.navigate(pagesNames.login)
-    }
-
     return (
-        <View>
-            <Text style={textStyle.tests}>Home</Text>
-            <Button onPress={navigateToLogin} title="Ir para login"></Button>
+        <View style={homeStyle.container}>
+            <NavBar/>
+            <ScrollView contentContainerStyle={homeStyle.scroll}>
+                <LinkSetinha text="Continue Assistindo"/>
+                <AnimeHorizontalListTest/>
+                <LinkSetinha text="Lançamentos"/>
+                <AnimeHorizontalListTest/>
+                <LinkSetinha text="Recomendados"/>
+                <AnimeHorizontalListTest/>
+                <LinkSetinha text="Em Alta"/>
+                <AnimeHorizontalListTest/>
+                <LinkSetinha text="Temporadas"/>
+                <AnimeHorizontalListTest/>
+            </ScrollView>
         </View>
     )
 }
+const homeStyle = StyleSheet.create({
+    container: {
+        marginBottom: 55,
+    },
+    scroll: {
+        paddingTop: 30,
+    }
+})
