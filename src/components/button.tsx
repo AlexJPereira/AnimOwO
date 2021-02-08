@@ -29,7 +29,7 @@ const buttonStyle = StyleSheet.create({
         textAlign: 'center',
     },
     textButton: {
-        fontFamily: 'Public Sans',
+        fontFamily: 'Roboto',
         fontStyle: 'normal',
         fontWeight: "600",
         fontSize: 20,

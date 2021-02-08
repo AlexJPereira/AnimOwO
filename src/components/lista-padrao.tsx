@@ -1,7 +1,7 @@
 import React from 'react'
-import { View, StyleSheet, Text } from 'react-native'
+import { View, StyleSheet, Text, ScrollView } from 'react-native'
 
-import AnimeVerticalList from '../components/anime-vertical-list'
+import textStyle from '../styles/text'
 
 interface ListaPadraoProps{
     name: string,
@@ -10,26 +10,26 @@ interface ListaPadraoProps{
 
 export default function ListaPadrao(props: ListaPadraoProps){
     return(
-        <View>
+        <View style={listaPadrao.container}>
             <Text style={listaPadrao.texto}>{props.name}</Text>
-            <AnimeVerticalList>
+            <ScrollView contentContainerStyle={listaPadrao.lista}>
                 {props.children}
-            </AnimeVerticalList>
+            </ScrollView>
         </View>
     )
 }
 
 const listaPadrao = StyleSheet.create({
+    container: {
+        height: '100%',
+        paddingBottom: 100
+    },
     texto: {
-        textAlignVertical: 'center',
-        fontFamily: 'Roboto',
-        fontStyle: 'normal',
-        fontWeight: 'normal',
-        fontSize: 20,
-        lineHeight: 23,
-        letterSpacing: 1,
-        color: 'white',
-        paddingHorizontal: 15,
-        marginTop: 40
+        ...textStyle.tituloPagina,
+        marginTop: 40,
+        marginBottom: 30,
+    },
+    lista: {
+        paddingBottom: 40
     }
 })
