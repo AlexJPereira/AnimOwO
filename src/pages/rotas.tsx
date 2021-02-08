@@ -7,6 +7,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import {useRoute} from '@react-navigation/native'; 
+import { Text } from 'react-native'
 
 // estilos
 import pagesNames from './pagesNames'
@@ -70,7 +71,6 @@ export function TabNavigator(){
                         paddingBottom: 3
                 }
                 }}
-            
             >
                 <Tab.Screen
                 name={pagesNames.home}
@@ -108,10 +108,9 @@ export function TabNavigator(){
                     ),
                 }}
                 />
-                
                 <Tab.Screen
                 name={pagesNames.menu}
-                component={Menu}
+                children={()=><Menu screenName="teste"></Menu> }
                 options={{
                     tabBarIcon: ({color, size} : barProps) => (
                     <Ionicons name="md-menu" size={size} color={color} />

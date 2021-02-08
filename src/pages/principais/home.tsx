@@ -2,11 +2,10 @@ import React from 'react'
 import { ScrollView, View, StyleSheet } from 'react-native'
 
 import NavBar from '../../components/navBar'
-//import AnimeHorizontalList from '../../components/anime-horizontal-list'
+// importar quando nao for usar o test mais
+// import AnimeHorizontalList from '../../components/anime-horizontal-list'
 import AnimeHorizontalListTest from '../../components/anime-horizontal-list-test'
 import LinkSetinha from '../../components/link-setinha'
-
-const FMA = require('../../app-assets/animes-tests/fma.jpg')
 
 export default function Home(){
     return (

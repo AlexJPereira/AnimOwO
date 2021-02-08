@@ -2,6 +2,8 @@ import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { MaterialIcons } from '@expo/vector-icons'
 
+import textStyle from '../styles/text'
+
 interface LinkSetinhaProps{
     text: string,
 }
@@ -17,13 +19,8 @@ export default function LinkSetinha(props: LinkSetinhaProps){
 
 const linkSetinhaStyle = StyleSheet.create({
     texto: {
-        textAlignVertical: 'center',
-        fontFamily: 'Roboto',
-        fontStyle: 'normal',
-        fontWeight: 'normal',
+        ...textStyle.padrao,
         fontSize: 20,
-        lineHeight: 23,
-        letterSpacing: 1,
         color: 'white',
         paddingHorizontal: 15
     },

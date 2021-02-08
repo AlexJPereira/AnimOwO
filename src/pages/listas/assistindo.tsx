@@ -16,8 +16,13 @@ export default function Assistindo(){
             <NavBar/>
             <ListaPadrao name="Assistindo">
                 <AnimeCardDetails animeImage={FMA} animeName="Fullmetal Alchemist" details="Episódio 2 de 20"/>
+                <AnimeCardDetails animeImage={Gintama} animeName="Gintama" details="Episódio 5 de 24"/>
+                <AnimeCardDetails animeImage={HunterXHunter} animeName="Hunter X Hunter" details="Episódio 7 de 12"/>
+                <AnimeCardDetails animeImage={SteinsGate} animeName="Steins Gate" details="Episódio 0 de 6"/>
             </ListaPadrao>
         </View>
     )
 }
+
+
 
