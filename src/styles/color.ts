@@ -12,5 +12,8 @@ export default StyleSheet.create({
     },
     corBackground: {
         color: '#3A3535'
-    }
+    },
+    corPrincipalClara:{
+        color: '#B0AAAA'
+    },
 })

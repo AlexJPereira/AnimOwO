@@ -22,7 +22,7 @@ export default function ListaPadrao(props: ListaPadraoProps){
 const listaPadrao = StyleSheet.create({
     container: {
         height: '100%',
-        paddingBottom: 100
+        paddingBottom: 100,
     },
     texto: {
         ...textStyle.tituloPagina,
@@ -31,5 +31,5 @@ const listaPadrao = StyleSheet.create({
     },
     lista: {
         paddingBottom: 40
-    }
+    },
 })
