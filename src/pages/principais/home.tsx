@@ -1,9 +1,8 @@
 import React from 'react'
 import { ScrollView, View, StyleSheet } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
 
 import NavBar from '../../components/navBar'
-// importar quando nao for usar o test mais
-// import AnimeHorizontalList from '../../components/anime-horizontal-list'
 import AnimeHorizontalListTest from '../../components/anime-horizontal-list-test'
 import LinkSetinha from '../../components/link-setinha'
 

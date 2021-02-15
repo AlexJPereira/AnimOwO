@@ -1,13 +1,13 @@
 import React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'; 
-import { createStackNavigator } from '@react-navigation/stack'
+import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack'
 import { Ionicons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons'; 
 import { FontAwesome5 } from '@expo/vector-icons';
 import { createDrawerNavigator } from '@react-navigation/drawer';
-import {useRoute} from '@react-navigation/native'; 
-import { Text } from 'react-native'
+
+import { RootStackPagesProps, setRootStackNavigator } from './rootStackNavigator'
 
 // estilos
 import pagesNames from './pagesNames'
@@ -29,11 +29,10 @@ import Favoritos from './listas/favoritos'
 import PlanoAssistir from './listas/plano-assistir'
 
 // componentes
-import Menu from '../components/menu'
+import Menu from './principais/menu'
 
 const AppStack = createStackNavigator()
 const Tab = createBottomTabNavigator()
-const Drawer = createDrawerNavigator();
 
 interface barProps {
     color: string; 
@@ -52,14 +51,17 @@ const MyTheme = {
     },
 };
 
+export interface TabkNavigatorProps{
+    navigation: StackNavigationProp<RootStackPagesProps, 'home'>
+}
 
-export function TabNavigator(){
-    const route = useRoute();
+export function TabNavigator(props: TabkNavigatorProps){
+    setRootStackNavigator(props.navigation)
 
     return (
         <NavigationContainer theme={MyTheme} independent={true}>
             <Tab.Navigator
-                initialRouteName={'Home'}
+                initialRouteName={'home'}
                 tabBarOptions={{
                 showLabel: false,
                 activeTintColor: '#AB3962',
@@ -71,10 +73,11 @@ export function TabNavigator(){
                         paddingBottom: 3
                 }
                 }}
+                backBehavior={'none'}
             >
                 <Tab.Screen
                 name={pagesNames.home}
-                component={Home}
+                children={() => <Home/>}
                 options={{
                     tabBarIcon: ({color, size} : barProps) => (
                     <Ionicons name="home-sharp" size={size} color={color} />
@@ -110,7 +113,9 @@ export function TabNavigator(){
                 />
                 <Tab.Screen
                 name={pagesNames.menu}
-                children={()=><Menu screenName="teste"></Menu> }
+                children={()=>{
+                    return <Menu></Menu>}
+                }
                 options={{
                     tabBarIcon: ({color, size} : barProps) => (
                     <Ionicons name="md-menu" size={size} color={color} />
@@ -125,7 +130,7 @@ export function TabNavigator(){
 export function StackNavigator(){
     return (
         <NavigationContainer theme={MyTheme}>
-            <AppStack.Navigator screenOptions={{ headerShown: false }}>
+            <AppStack.Navigator screenOptions={{ headerShown: false }} initialRouteName={pagesNames.login}>
                 <AppStack.Screen name={pagesNames.login} component={Login}/>
                 <AppStack.Screen name={pagesNames.home} component={TabNavigator}/>
                 <AppStack.Screen name={pagesNames.perfil} component={Perfil}/>

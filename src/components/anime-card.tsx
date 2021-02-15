@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactNative from 'react-native'
-import { View, Image, Text } from 'react-native'
-import { StyleSheet } from 'react-native'
+import { View, Image, Text, TouchableOpacity, StyleSheet } from 'react-native'
+import { RootStackNavigator } from '../pages/rootStackNavigator'
 
 export interface AnimeCardProps {
     image: ReactNative.ImageSourcePropType
@@ -19,10 +19,10 @@ export default function AnimeCard(props: AnimeCardProps){
     }
 
     return(
-        <View style={animeCardStyle.animeCard}>
+        <TouchableOpacity onPress={()=>RootStackNavigator.navigate('anime-page', {animeName: props.name? props.name : 'name error'})} style={animeCardStyle.animeCard}>
             <Image style={animeCardStyle.animeImage} source={props.image}/>
             <AnimeName/>
-        </View>
+        </TouchableOpacity>
     )
 }
 

@@ -26,13 +26,13 @@ const buttonStyle = StyleSheet.create({
         display: 'flex',
         justifyContent: 'center',
         alignContent: 'center',
-        textAlign: 'center',
+        textAlign: 'center'
     },
     textButton: {
         fontFamily: 'Roboto',
         fontStyle: 'normal',
         fontWeight: "600",
-        fontSize: 20,
+        fontSize: 15,
         lineHeight: 23,
         letterSpacing: 5,
         color: '#AB3962', 

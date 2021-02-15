@@ -28,7 +28,9 @@ const detailsStyle = StyleSheet.create({
         backgroundColor: color.corMenu.color,
         flexDirection: 'row',
         padding: 20,
-        marginVertical: 2
+        marginVertical: 5,
+        borderBottomColor: color.corPrincipalClara.color,
+        borderBottomWidth: 1
     },
     animeImage: {
         height: 138,

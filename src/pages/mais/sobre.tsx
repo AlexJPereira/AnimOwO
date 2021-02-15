@@ -1,8 +1,14 @@
 import React from 'react'
-import { View } from 'react-native'
+import { 
+    View,
+    Text } from 'react-native'
 
 export default function Sobre(){
     return (
-        <View/>
+        <View>
+            <Text> 
+                Trabalho desenvolvido por Wykke e Leonardo. 
+            </Text>
+        </View>
     )
 }

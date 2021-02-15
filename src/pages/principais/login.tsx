@@ -4,7 +4,6 @@ import { Image } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
 import textStyle from '../../styles/text'
-import colorStyle from '../../styles/color'
 import pagesNames from '../pagesNames'
 import Button from '../../components/button'
 import Link from '../../components/link'
@@ -25,7 +24,7 @@ export default function Login(){
                 Deseja entrar no aplicativo com sua conta do My Anime List?
             </Text>
             <Button onPress={navigateToHome} title="ENTRE"></Button>
-            <Link onPress={navigateToHome} title="Continuar como convidado"> </Link>
+            <Link onPress={navigateToHome} title="Continuar como convidado"></Link>
         </View>
     )
 }
