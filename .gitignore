@@ -11,3 +11,6 @@ web-build/
 
 # macOS
 .DS_Store
+
+# mal-api
+src/services/data.ts

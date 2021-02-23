@@ -1,7 +1,8 @@
 {
   "expo": {
-    "name": "my-app",
-    "slug": "my-app",
+    "name": "animowo",
+    "slug": "animowo",
+    "scheme": "animowo",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -26,11 +27,12 @@
       }
     },
     "androidStatusBar": {
-        "backgroundColor": "#B6A7A7",
-        "translucent": false
+      "backgroundColor": "#B6A7A7",
+      "translucent": false
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "description": ""
   }
 }
