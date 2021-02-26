@@ -1,8 +1,11 @@
-import React from 'react'
-import { View } from 'react-native'
+import React from 'react'; 
+import { View } from 'react-native';
+import SearchBar from '../../components/search-bar';
 
 export default function Configuracoes(){
     return (
-        <View/>
+        <View>
+            <SearchBar></SearchBar>
+        </View>
     )
 }
