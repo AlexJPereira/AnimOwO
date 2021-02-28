@@ -3,12 +3,12 @@ import { View, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native';
-import { StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native';
+import { RootStackNavigator } from '../pages/rootStackNavigator';
 
-import { RootStackNavigator } from '../pages/rootStackNavigator'
-import SearchBar from './search-bar'
+import SearchBar from './search-bar';
 
-const LogoCompleto = require('../app-assets/logo/Logo-Completo.png')
+const LogoCompleto = require('../app-assets/logo/Logo-Completo.png');
 
 export default function NavBar(){
 
