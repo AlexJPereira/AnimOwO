@@ -1,9 +1,10 @@
-import { setStatusBarNetworkActivityIndicatorVisible } from 'expo-status-bar';
 import * as React from 'react';
 import { 
     View, 
     StyleSheet } from 'react-native';
 import { Searchbar } from 'react-native-paper';
+import { Ionicons } from '@expo/vector-icons';
+import defaultColors from '../styles/color';
 
 
 export default function SearchBar() {
@@ -18,12 +19,16 @@ export default function SearchBar() {
     const { firstQuery } = state;
 
     return (
-        <View style={ComponentStyle.viewStyle}>
+        <View>
             <Searchbar
-                placeholder="Naruto"
-                onChangeText={query => { setState({ firstQuery: query }); }}
+                icon={() => <Ionicons name="search" size={24} style={ComponentStyle.iconStyle}/>}
+                placeholder="Pesquisar"
+                placeholderTextColor='#C4C4C4'
+                selectionColor='#fff'
+                onChangeText={ ()=> {}}
                 value={firstQuery}
                 style={ComponentStyle.barStyle}
+                inputStyle={{color:'#fff'}}
             />
         </View>
     );
@@ -35,6 +40,11 @@ const ComponentStyle = StyleSheet.create({
         paddingTop: 30
     }, 
     barStyle: {
-        backgroundColor: 'white'
+        backgroundColor: defaultColors.corBackground.color, 
+        width: 500,
+        paddingLeft: 30
+    }, 
+    iconStyle: { 
+        color: 'white'
     }
 })
