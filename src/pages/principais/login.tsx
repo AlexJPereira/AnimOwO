@@ -20,8 +20,14 @@ export default function Login(){
     }
 
     async function login(){
-        //const token = await malApi.getToken()
-        const auth = await malApi.login()
+        if(!(await malApi.isLoggedIn())){
+            console.log("não está logado, logando...")
+            await malApi.login()
+        }else{
+            console.log("ja está logado")
+        }
+        if(await malApi.isLoggedIn())
+            navigateToHome()
     }
 
     return (
