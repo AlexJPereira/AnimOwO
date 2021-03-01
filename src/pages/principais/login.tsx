@@ -20,14 +20,8 @@ export default function Login(){
     }
 
     async function login(){
+        //const token = await malApi.getToken()
         const auth = await malApi.login()
-        
-        if(auth && auth.type == "success"){
-            alert("Login feito com sucesso")
-            navigator.navigate('home')
-        }else{
-            alert("Falha no login")
-        }
     }
 
     return (
