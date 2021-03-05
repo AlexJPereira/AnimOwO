@@ -1,16 +1,14 @@
-import React from 'react'
+import React from 'react';
 import { 
     View, 
     ScrollView,
     Image,
     Text,
     StyleSheet,
-    Dimensions, 
-    FlatList,
-    StatusBar } from 'react-native'
+    Dimensions } from 'react-native';
 
-import { RouteProp } from '@react-navigation/native'
-import { RootStackPagesProps } from '../rootStackNavigator'
+import { RouteProp } from '@react-navigation/native';
+import { RootStackPagesProps } from '../rootStackNavigator';
 
 import Button from '../../components/button'
 import NavBar from '../../components/navBar'

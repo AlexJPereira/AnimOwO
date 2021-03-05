@@ -4,7 +4,8 @@ export type RootStackPagesProps = {
     'home': any,
     'perfil': any,
     'anime-page': {animeName: string}, 
-    'lista-completa': any, 
+    'lista-completa': any,
+    'link-page': any, 
     'downloads': any, 
     'sobre': any, 
     'configuracoes': any
