@@ -5,6 +5,7 @@ import data from '../data'
 import { baseUrlOAuth } from './axios'
 import * as LoginFunc from './login'
 import * as UserFunc from './user'
+import * as AnimeFunc from './anime'
 
 export type CompleteAuthSessionResult = LoginFunc.CompleteAuthSessionResult
 
@@ -61,4 +62,11 @@ export default class MalApi{
     getUserList = UserFunc.getUserList.bind(this)
     updateAnimeInfo = UserFunc.updateAnimeInfo.bind(this)
     deleteAnimeFromList = UserFunc.deleteAnimeFromList.bind(this)
+
+    searchAnime = AnimeFunc.searchAnime.bind(this)
+    getAnimeDetails = AnimeFunc.getAnimeDetails.bind(this)
+    getAnimeRankingList = AnimeFunc.getAnimeRankingList.bind(this)
+    getSeasonalAnime = AnimeFunc.getSeasonalAnime.bind(this)
+    getSuggestedAnime = AnimeFunc.getSuggestedAnime.bind(this)
+    
 }

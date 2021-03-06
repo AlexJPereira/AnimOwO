@@ -26,8 +26,11 @@ export default function Login(){
         }else{
             console.log("ja está logado")
         }
-        if(await malApi.isLoggedIn())
-            navigateToHome()
+        if(await malApi.isLoggedIn()){
+            const test = await malApi.getUserProfileInfo()
+            console.log(test)
+            //navigateToHome()
+        }
     }
 
     return (
