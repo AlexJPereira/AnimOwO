@@ -2,6 +2,10 @@ import { printError } from '../error'
 import api from './axios'
 import MalApi from './'
 import { stringify } from 'querystring'
+import {
+    userResponse, genericListResponse,
+    listStatus, listSort, updateAnimeParams
+} from './interfaces'
 
 /** Retorna algumas informações do usuário */
 export async function getUserProfileInfo(this: MalApi){
@@ -19,9 +23,9 @@ export async function getUserProfileInfo(this: MalApi){
  * Retorna a lista específica do usuário
  * @param limit limite máximo é 1000
  */
-export async function getUserList(this: MalApi, status: listStatus, sort: listSort, offset?: number, limit?: number){
+export async function getUserList(this: MalApi, status: listStatus, sort: listSort, user: string = '@me', offset?: number, limit?: number){
     try{
-        const response = await api.get('/users/@me/animelist',{
+        const response = await api.get(`/users/${user}/animelist`,{
             params: {
                 status,
                 sort,
@@ -29,7 +33,7 @@ export async function getUserList(this: MalApi, status: listStatus, sort: listSo
                 limit
             }
         })
-        const list = response.data as listResponse
+        const list = response.data as genericListResponse
         return list
     }catch(error){
         printError("getUserList()", error)
@@ -68,43 +72,4 @@ export async function deleteAnimeFromList(this: MalApi, id: number){
         printError("deleteAnimeFromList()", error)
         return false
     }
-}
-
-
-export type listStatus = "watching" | "completed" | "on_hold" | "dropped" | "plan_to_watch"
-export type listSort = "list_score" | "list_updated_at" | "anime_title" | "anime_start_date"
-
-export type userResponse = {
-    "id": string,
-    "joined_at": string,
-    "location": string,
-    "name": string,
-    "picture": string
-}
-export type listResponse = {
-    data: animeLessInfo[],
-    paging: {
-        next: string
-    }
-}
-export type animeLessInfo = {
-    node: {
-        id: number,
-        "main_picture": {
-            large: string,
-            medium: string
-        }
-    },
-    title: string
-}
-export type updateAnimeParams = {
-    status?: listStatus,
-    is_rewatching?: boolean,
-    score?: number,
-    num_watched_episodes?: number,
-    priority?: number,
-    num_times_rewatched?: number,
-    rewatch_value?: number,
-    tags?: string,
-    comments?: string
 }
