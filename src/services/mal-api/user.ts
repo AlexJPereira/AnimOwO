@@ -52,7 +52,6 @@ export async function getUserList(this: MalApi, status: listStatus, sort: listSo
  * @param rewatch_value Número de 0 a 5
  */
 export async function updateAnimeInfo(this: MalApi, id: number, params: updateAnimeParams){
-    console.log(params)
     try{
         const response = await api.put(`/anime/${id}/my_list_status`, stringify(params), {
             headers: {
