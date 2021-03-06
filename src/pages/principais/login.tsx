@@ -27,7 +27,7 @@ export default function Login(){
             console.log("ja está logado")
         }
         if(await malApi.isLoggedIn()){
-            const test = await malApi.getAnimeRankingList('all')
+            const test = await malApi.getUserProfileInfo()
             console.log(test)
             //navigateToHome()
         }

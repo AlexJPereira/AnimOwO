@@ -6,7 +6,10 @@ import {
     animeSeason, seasonalSort, rankingType, animeFields 
 } from './interfaces'
 
-/** Procura por um anime na lista de animes */
+/** 
+ * Procura por um anime na lista de animes 
+ * @param limit Valor padrão e máximo é 100
+*/
 export async function searchAnime(this: MalApi, searchText: string, limit?: number, offset?: number){
     try{
         const response = await api.get(`/anime`,{
@@ -40,7 +43,10 @@ export async function getAnimeDetails(this: MalApi, animeId: number){
     }
 }
 
-/** Retorna uma lista de animes representando o ranking da comunidade */
+/** 
+ * Retorna uma lista de animes representando o ranking da comunidade 
+ * @param limit Valor padrão é 100 e valor máximo é 500
+*/
 export async function getAnimeRankingList(this: MalApi, rankingType: rankingType, limit?:number, offset?: number){
     try{
         const response = await api.get(`/anime/ranking`,{
@@ -58,7 +64,10 @@ export async function getAnimeRankingList(this: MalApi, rankingType: rankingType
     }
 }
 
-/** Retorna a lista de animes de uma temporada */
+/** 
+ * Retorna a lista de animes de uma temporada 
+ * @param limit Valor padrão é 100 e valor máximo é 500
+*/
 export async function getSeasonalAnime(this: MalApi, year: number, season: animeSeason, sort?: seasonalSort, limit?: number, offset?: number){
     try{
         const response = await api.get(`/anime/season/${year}/${season}`,{
@@ -76,7 +85,10 @@ export async function getSeasonalAnime(this: MalApi, year: number, season: anime
     }
 }
 
-/** Retorna a lista de sugestoes de animes para o usuario logado */
+/** 
+ * Retorna a lista de sugestoes de animes para o usuario logado 
+ * @param limit Valor padrão e máximo é 100
+*/
 export async function getSuggestedAnime(this: MalApi, limit?: number, offset?: number){
     try{
         const response = await api.get(`/anime/suggestions`,{

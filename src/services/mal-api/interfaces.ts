@@ -7,11 +7,30 @@ export type seasonalSort = "anime_score" | "anime_num_list_users"
 
 /* RESPONSES */
 export type userResponse = {
-    "id": string,
+    "anime_statistics": {
+        "mean_score": number,
+        "num_days": number,
+        "num_days_completed": number,
+        "num_days_dropped": number,
+        "num_days_on_hold": number,
+        "num_days_watched": number,
+        "num_days_watching": number,
+        "num_episodes": number,
+        "num_items": number,
+        "num_items_completed": number,
+        "num_items_dropped": number,
+        "num_items_on_hold": number,
+        "num_items_plan_to_watch": number,
+        "num_items_watching": number,
+        "num_times_rewatched": number,
+    },
+    "id": number,
+    "is_supporter": boolean,
     "joined_at": string,
     "location": string,
     "name": string,
-    "picture": string
+    "picture": string,
+    "time_zone": string,
 }
 export type genericListResponse = {
     data: genericAnimeNode[],
@@ -155,6 +174,18 @@ export type updateAnimeParams = {
     tags?: string,
     comments?: string
 }
+export const userFields = [
+    "id",
+    "name",
+    "picture",
+    "gender",
+    "birthday",
+    "location",
+    "joined_at",
+    "anime_statistics",
+    "time_zone",
+    "is_supporter",
+]
 export const animeFields = [
     "id",
     "title",

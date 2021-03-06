@@ -4,13 +4,17 @@ import MalApi from './'
 import { stringify } from 'querystring'
 import {
     userResponse, genericListResponse,
-    listStatus, listSort, updateAnimeParams
+    listStatus, listSort, updateAnimeParams, userFields
 } from './interfaces'
 
 /** Retorna algumas informações do usuário */
 export async function getUserProfileInfo(this: MalApi){
     try{
-        const response = await api.get('/users/@me')
+        const response = await api.get('/users/@me', {
+            params: {
+                fields: userFields.toString()
+            }
+        })
         const user = response.data as userResponse
         return user
     }catch(error){
@@ -21,7 +25,7 @@ export async function getUserProfileInfo(this: MalApi){
 
 /**
  * Retorna a lista específica do usuário
- * @param limit limite máximo é 1000
+ * @param limit Valor máximo é 1000
  */
 export async function getUserList(this: MalApi, status: listStatus, sort: listSort, user: string = '@me', offset?: number, limit?: number){
     try{
