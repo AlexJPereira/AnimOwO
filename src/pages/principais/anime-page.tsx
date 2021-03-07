@@ -1,25 +1,22 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { 
     View, 
     ScrollView,
     Image,
     Text,
     StyleSheet,
-    Dimensions, 
-    Modal,
-    TouchableHighlight } from 'react-native';
+    Dimensions } from 'react-native';
 
 import { RouteProp } from '@react-navigation/native';
 import { RootStackPagesProps } from '../rootStackNavigator';
 import { RootStackNavigator } from '../rootStackNavigator';
-
-
 import Button from '../../components/button';
 import NavBar from '../../components/navBar';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { Ionicons } from '@expo/vector-icons';
 
-//onPress={()=>{ RootStackNavigator.navigate('watch-page', params)}
+import { malApi } from '../../services/global'
+import { animeDetailsInitialValues, animeDetailsResponse } from "../../services/mal-api/interfaces";
+
+
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 const screenHeight = Dimensions.get('screen').height;
@@ -33,60 +30,53 @@ export type AnimePageProps = {
 export default function AnimePage(props: AnimePageProps){
 
     const params = props.route.params
-    const [modalVisible, setModalVisible] = useState(false);
+    const initialValues: animeDetailsResponse = {
+        ...animeDetailsInitialValues,
+        title: "Anime",
+        main_picture: {
+            medium: "https://idealservis.com.br/portal/wp-content/uploads/2014/07/default-placeholder.png",
+            large: "https://idealservis.com.br/portal/wp-content/uploads/2014/07/default-placeholder.png"
+        }, 
+        synopsis: "Anime Description"
+    }
+    const [state, setState] = useState(initialValues)
+    
+    async function getAnimeDetails(){
+        const anime = await malApi.getAnimeDetails(params.id)
+        if(anime){
+            setState(anime)
+        }
+    }
+
+    useEffect(()=>{
+        getAnimeDetails()
+    },[])
 
     return (
         <View style={PageStyle.mainStyle}>
             <NavBar></NavBar>
             <View style={PageStyle.cardStyle}>
-                <Image source={params.animeImage} style={PageStyle.imageStyle}></Image>
+                <Image source={{uri: state.main_picture.medium}} style={PageStyle.imageStyle}></Image>
                 <View style={PageStyle.viewStyle}>
                     <View style={PageStyle.nameField}>
-                        <Text style={PageStyle.titleStyle} ellipsizeMode='tail' numberOfLines={2}>{params.animeName}</Text>
+                        <Text style={PageStyle.titleStyle} ellipsizeMode='tail' numberOfLines={2}>{state.title}</Text>
                     </View>
-                    <Text style={PageStyle.episodesStyle}>{screenHeight-windowHeight} Episódios</Text>
+                    <Text style={PageStyle.episodesStyle}>{state.num_episodes} Episódios</Text>
                     <View style={PageStyle.buttonField}>
                         <Button 
                             title={"ASSISTIR"} 
-                            onPress={()=>{setModalVisible(!modalVisible)}}/>
+                            onPress={()=>{RootStackNavigator.navigate('watch-page', { anime: state })}}/>
                         <Button title={"DOWNLOAD"} onPress={()=>{}}/>
                     </View>
                 </View>
-                <Text style={PageStyle.noteStyle}>9.12</Text>
+                <Text style={PageStyle.noteStyle}>{state.mean}</Text>
             </View>
             <View>
                 <Text style={PageStyle.sinopsysTitle}>Sinópse:</Text>
             </View>
-            {modalVisible ? (
-                <View style={PageStyle.seasonCard}> 
-                    <TouchableOpacity 
-                        onPress={()=>{RootStackNavigator.navigate('watch-page', 
-                                      {animeName: params.animeName ? params.animeName : 'error', 
-                                       animeImage: params.animeImage,
-                                       animeSeason: 1 })}}>
-                        <Text style={PageStyle.episodesStyle}> Temporada 1 </Text>
-                    </TouchableOpacity> 
-                    <TouchableOpacity 
-                        onPress={()=>{RootStackNavigator.navigate('watch-page', 
-                                      {animeName: params.animeName ? params.animeName : 'error', 
-                                       animeImage: params.animeImage,
-                                       animeSeason: 2 })}}>
-                        <Text style={PageStyle.episodesStyle}> Temporada 2 </Text>
-                    </TouchableOpacity> 
-                </View>
-            ):null}
             <ScrollView contentContainerStyle={PageStyle.sinopsysView}>
                 <View style={PageStyle.sinopsysCard}>
-                    <Text> 
-                        Alchemy is bound by this Law of Equivalent Exchange—something the young brothers Edward and Alphonse Elric only realize after attempting human transmutation: the one forbidden act of alchemy. They pay a terrible price for their transgression—Edward loses his left leg, Alphonse his physical body. It is only by the desperate sacrifice of Edward's right arm that he is able to affix Alphonse's soul to a suit of armor. Devastated and alone, it is the hope that they would both eventually return to their original bodies that gives Edward the inspiration to obtain metal limbs called "automail" and become a state alchemist, the Fullmetal Alchemist.
-                        Three years of searching later, the brothers seek the Philosopher's Stone, a mythical relic that allows an alchemist to overcome the Law of Equivalent Exchange. Even with military allies Colonel Roy Mustang, Lieutenant Riza Hawkeye, and Lieutenant Colonel Maes Hughes on their side, the brothers find themselves caught up in a nationwide conspiracy that leads them not only to the true nature of the elusive Philosopher's Stone, but their country's murky history as well. In between finding a serial killer and racing against time, Edward and Alphonse must ask themselves if what they are doing will make them human again... or take away their humanity.
-                        Alchemy is bound by this Law of Equivalent Exchange—something the young brothers Edward and Alphonse Elric only realize after attempting human transmutation: the one forbidden act of alchemy. They pay a terrible price for their transgression—Edward loses his left leg, Alphonse his physical body. It is only by the desperate sacrifice of Edward's right arm that he is able to affix Alphonse's soul to a suit of armor. Devastated and alone, it is the hope that they would both eventually return to their original bodies that gives Edward the inspiration to obtain metal limbs called "automail" and become a state alchemist, the Fullmetal Alchemist.
-                        Three years of searching later, the brothers seek the Philosopher's Stone, a mythical relic that allows an alchemist to overcome the Law of Equivalent Exchange. Even with military allies Colonel Roy Mustang, Lieutenant Riza Hawkeye, and Lieutenant Colonel Maes Hughes on their side, the brothers find themselves caught up in a nationwide conspiracy that leads them not only to the true nature of the elusive Philosopher's Stone, but their country's murky history as well. In between finding a serial killer and racing against time, Edward and Alphonse must ask themselves if what they are doing will make them human again... or take away their humanity.
-                        Alchemy is bound by this Law of Equivalent Exchange—something the young brothers Edward and Alphonse Elric only realize after attempting human transmutation: the one forbidden act of alchemy. They pay a terrible price for their transgression—Edward loses his left leg, Alphonse his physical body. It is only by the desperate sacrifice of Edward's right arm that he is able to affix Alphonse's soul to a suit of armor. Devastated and alone, it is the hope that they would both eventually return to their original bodies that gives Edward the inspiration to obtain metal limbs called "automail" and become a state alchemist, the Fullmetal Alchemist.
-                        Three years of searching later, the brothers seek the Philosopher's Stone, a mythical relic that allows an alchemist to overcome the Law of Equivalent Exchange. Even with military allies Colonel Roy Mustang, Lieutenant Riza Hawkeye, and Lieutenant Colonel Maes Hughes on their side, the brothers find themselves caught up in a nationwide conspiracy that leads them not only to the true nature of the elusive Philosopher's Stone, but their country's murky history as well. In between finding a serial killer and racing against time, Edward and Alphonse must ask themselves if what they are doing will make them human again... or take away their humanity.
-                        Alchemy is bound by this Law of Equivalent Exchange—something the young brothers Edward and Alphonse Elric only realize after attempting human transmutation: the one forbidden act of alchemy. They pay a terrible price for their transgression—Edward loses his left leg, Alphonse his physical body. It is only by the desperate sacrifice of Edward's right arm that he is able to affix Alphonse's soul to a suit of armor. Devastated and alone, it is the hope that they would both eventually return to their original bodies that gives Edward the inspiration to obtain metal limbs called "automail" and become a state alchemist, the Fullmetal Alchemist.
-                        Three years of searching later, the brothers seek the Philosopher's Stone, a mythical relic that allows an alchemist to overcome the Law of Equivalent Exchange. Even with military allies Colonel Roy Mustang, Lieutenant Riza Hawkeye, and Lieutenant Colonel Maes Hughes on their side, the brothers find themselves caught up in a nationwide conspiracy that leads them not only to the true nature of the elusive Philosopher's Stone, but their country's murky history as well. In between finding a serial killer and racing against time, Edward and Alphonse must ask themselves if what they are doing will make them human again... or take away their humanity.
-                    </Text>
+                    <Text>{state.synopsis}</Text>
                 </View>
             </ScrollView>
         </View>

@@ -17,7 +17,7 @@ export default class MalApi{
     protected codeChallenge = ""
     protected codeVerifier = ""
 
-    protected baseUrlOAuth = baseUrlOAuth
+    protected baseUrlOAuth = 'https://myanimelist.net/v1/oauth2'
     protected discovery = {
         authorizationEndpoint: `${this.baseUrlOAuth}/authorize`,
         tokenEndpoint: `${this.baseUrlOAuth}/token`
@@ -49,6 +49,7 @@ export default class MalApi{
 
     isLoggedIn = LoginFunc.isLoggedIn.bind(this)
     login = LoginFunc.login.bind(this)
+    logoff = LoginFunc.logoff.bind(this)
     checkCodeChallenge = LoginFunc.checkCodeChallenge.bind(this)
     getNewCodeChallenge = LoginFunc.getNewCodeChallenge.bind(this)
     checkAuthCode = LoginFunc.checkAuthCode.bind(this)

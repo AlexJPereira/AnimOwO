@@ -1,24 +1,51 @@
-import React from 'react'
-import { View, Text } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { View } from 'react-native'
 
 import ListaPadrao from '../../components/lista-padrao'
 import NavBar from '../../components/navBar'
 import AnimeCardDetails from '../../components/anime-card-details'
-
-const FMA = require('../../app-assets/animes-tests/fma.jpg')
-const Gintama = require('../../app-assets/animes-tests/gintama.jpg')
-const HunterXHunter = require('../../app-assets/animes-tests/hunterxhunter.jpg')
-const SteinsGate = require('../../app-assets/animes-tests/steinsgate.jpg')
+import { malApi } from '../../services/global'
 
 export default function Assistindo(){
+
+    const [state, setState] = useState({
+        assitindo: [{
+            animeTitle: '', 
+            animePic: 'https://idealservis.com.br/portal/wp-content/uploads/2014/07/default-placeholder.png', 
+            episodesNumber: 0, 
+            episodesWatched: 0
+        }]
+    })
+
+    async function getUserList(){
+        const response = await malApi.getUserList('watching', 'anime_title')
+        if(response)
+            setState({
+                assitindo: response.data.map((element) => ({
+                    animeTitle: element.node.title,
+                    animePic: element.node.main_picture.medium,
+                    episodesNumber: element.node.num_episodes,
+                    episodesWatched: element.node.my_list_status.num_episodes_watched
+                }))
+            })
+    }
+
+    useEffect(()=>{
+        getUserList()
+    }, [])
+    
     return (
         <View>
             <NavBar/>
             <ListaPadrao name="Assistindo">
-                <AnimeCardDetails animeImage={FMA} animeName="Fullmetal Alchemist" details="Episódio 2 de 20"/>
-                <AnimeCardDetails animeImage={Gintama} animeName="Gintama" details="Episódio 5 de 24"/>
-                <AnimeCardDetails animeImage={HunterXHunter} animeName="Hunter X Hunter" details="Episódio 7 de 12"/>
-                <AnimeCardDetails animeImage={SteinsGate} animeName="Steins Gate" details="Episódio 0 de 6"/>
+                {
+                    state.assitindo.map((element, index) => 
+                        <AnimeCardDetails key={index}
+                            animeName={element.animeTitle} 
+                            animeImage={{ uri: element.animePic }} 
+                            details={`Episódio ${element.episodesWatched} de ${element.episodesNumber}`}/>
+                    )
+                }
             </ListaPadrao>
         </View>
     )

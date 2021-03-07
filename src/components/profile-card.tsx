@@ -1,22 +1,29 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { 
     View, 
     Image, 
     Text,
-    StyleSheet } from 'react-native'
+    StyleSheet,
+    ImageSourcePropType } from 'react-native'
 
 
-const ProfilePicture = require('../../assets/wykke.png')
+export interface AnimeCardProps{
+    profilePic: ImageSourcePropType,
+    qtdCompletos: number,
+    qtdAssistindo: number,
+    qtdPlanoAssistir: number
+}
 
-export default function AnimeCard(){
+export default function AnimeCard(props: AnimeCardProps){
+
     return (
         <View style={ProfileCard.profile}> 
-            <Image source={ProfilePicture}>
+            <Image style={ProfileCard.image} source={props.profilePic}>
             </Image>
             <View>
-                <Text style={ProfileCard.innerText}>Completos: 532</Text>
-                <Text style={ProfileCard.innerText}>Assistindo: 2</Text>
-                <Text style={ProfileCard.innerText}>Plano de Assistir: 7</Text>
+                <Text style={ProfileCard.innerText}>Completos: {props.qtdCompletos}</Text>
+                <Text style={ProfileCard.innerText}>Assistindo: {props.qtdAssistindo}</Text>
+                <Text style={ProfileCard.innerText}>Plano de Assistir: {props.qtdPlanoAssistir}</Text>
             </View>
         </View>
     )
@@ -30,7 +37,11 @@ const ProfileCard = StyleSheet.create({
         height: 150,
         marginTop: 7,
         backgroundColor: '#252121'
-    }, 
+    },
+    image: {
+        height: 90,
+        width: 90
+    },
     innerText:{
         textAlign: 'left',
         textAlignVertical: 'center',
