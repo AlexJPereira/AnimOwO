@@ -3,6 +3,7 @@ const pagesNames = {
     home: "home",
     perfil: "perfil",
     animePage: "anime-page",
+    watchPage: "watch-page",
     configuracoes: "configuracoes",
     downloads: "downloads",
     listaCompleta: "lista-completa",

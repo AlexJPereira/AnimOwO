@@ -18,6 +18,7 @@ import Login from './principais/login'
 import Home from './principais/home'
 import Perfil from './principais/perfil'
 import AnimePage from './principais/anime-page'
+import WatchPage from './principais/watch-page'
 
 import Configuracoes from './mais/configuracoes'
 import Downloads from './mais/downloads'
@@ -135,6 +136,7 @@ export function StackNavigator(){
                 <AppStack.Screen name={pagesNames.home} component={TabNavigator}/>
                 <AppStack.Screen name={pagesNames.perfil} component={Perfil}/>
                 <AppStack.Screen name={pagesNames.animePage} component={AnimePage}/>
+                <AppStack.Screen name={pagesNames.watchPage} component={WatchPage} />
                 <AppStack.Screen name={pagesNames.configuracoes} component={Configuracoes}/>
                 <AppStack.Screen name={pagesNames.downloads} component={Downloads}/>
                 <AppStack.Screen name={pagesNames.listaCompleta} component={ListaCompleta}/>

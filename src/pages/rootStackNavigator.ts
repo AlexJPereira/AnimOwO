@@ -1,9 +1,16 @@
 import { StackNavigationProp } from "@react-navigation/stack";
+import ReactNative from 'react-native'; 
 
 export type RootStackPagesProps = {
     'home': any,
     'perfil': any,
-    'anime-page': {animeName: string}, 
+    'anime-page': {
+                    animeName: string,
+                    animeImage: ReactNative.ImageSourcePropType},
+    'watch-page': {
+                    animeName: string,
+                    animeImage: ReactNative.ImageSourcePropType,
+                    animeSeason: number}, 
     'lista-completa': any,
     'link-page': any, 
     'downloads': any, 

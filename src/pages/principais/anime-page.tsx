@@ -1,40 +1,54 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { 
     View, 
     ScrollView,
     Image,
     Text,
     StyleSheet,
-    Dimensions } from 'react-native';
+    Dimensions, 
+    Modal,
+    TouchableHighlight } from 'react-native';
 
 import { RouteProp } from '@react-navigation/native';
 import { RootStackPagesProps } from '../rootStackNavigator';
+import { RootStackNavigator } from '../rootStackNavigator';
 
-import Button from '../../components/button'
-import NavBar from '../../components/navBar'
 
-const animeImage = require('../../app-assets/animes-tests/fma.jpg'); 
+import Button from '../../components/button';
+import NavBar from '../../components/navBar';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Ionicons } from '@expo/vector-icons';
+
+//onPress={()=>{ RootStackNavigator.navigate('watch-page', params)}
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
-const screenHeight = Dimensions.get('screen').height
+const screenHeight = Dimensions.get('screen').height;
+
 
 export type AnimePageProps = {
     route: RouteProp<RootStackPagesProps, 'anime-page'>
 }
 
+
 export default function AnimePage(props: AnimePageProps){
+
+    const params = props.route.params
+    const [modalVisible, setModalVisible] = useState(false);
+
     return (
-        <View style={PageStyle.test}>
+        <View style={PageStyle.mainStyle}>
             <NavBar></NavBar>
             <View style={PageStyle.cardStyle}>
-                <Image source={animeImage} style={PageStyle.imageStyle}></Image>
+                <Image source={params.animeImage} style={PageStyle.imageStyle}></Image>
                 <View style={PageStyle.viewStyle}>
                     <View style={PageStyle.nameField}>
-                        <Text style={PageStyle.titleStyle} ellipsizeMode='tail' numberOfLines={2}>{props.route.params.animeName}</Text>
+                        <Text style={PageStyle.titleStyle} ellipsizeMode='tail' numberOfLines={2}>{params.animeName}</Text>
                     </View>
                     <Text style={PageStyle.episodesStyle}>{screenHeight-windowHeight} Episódios</Text>
                     <View style={PageStyle.buttonField}>
-                        <Button title={"ASSISTIR"} onPress={()=>{}}/>
+                        <Button 
+                            title={"ASSISTIR"} 
+                            onPress={()=>{setModalVisible(!modalVisible)}}/>
                         <Button title={"DOWNLOAD"} onPress={()=>{}}/>
                     </View>
                 </View>
@@ -43,6 +57,24 @@ export default function AnimePage(props: AnimePageProps){
             <View>
                 <Text style={PageStyle.sinopsysTitle}>Sinópse:</Text>
             </View>
+            {modalVisible ? (
+                <View style={PageStyle.seasonCard}> 
+                    <TouchableOpacity 
+                        onPress={()=>{RootStackNavigator.navigate('watch-page', 
+                                      {animeName: params.animeName ? params.animeName : 'error', 
+                                       animeImage: params.animeImage,
+                                       animeSeason: 1 })}}>
+                        <Text style={PageStyle.episodesStyle}> Temporada 1 </Text>
+                    </TouchableOpacity> 
+                    <TouchableOpacity 
+                        onPress={()=>{RootStackNavigator.navigate('watch-page', 
+                                      {animeName: params.animeName ? params.animeName : 'error', 
+                                       animeImage: params.animeImage,
+                                       animeSeason: 2 })}}>
+                        <Text style={PageStyle.episodesStyle}> Temporada 2 </Text>
+                    </TouchableOpacity> 
+                </View>
+            ):null}
             <ScrollView contentContainerStyle={PageStyle.sinopsysView}>
                 <View style={PageStyle.sinopsysCard}>
                     <Text> 
@@ -62,7 +94,7 @@ export default function AnimePage(props: AnimePageProps){
 }
 
 const PageStyle = StyleSheet.create({
-    test: {
+    mainStyle: {
         paddingBottom: screenHeight-windowHeight+30,
         maxHeight: screenHeight
     },
@@ -137,5 +169,12 @@ const PageStyle = StyleSheet.create({
     sinopsysCard:{
         backgroundColor: '#C4C4C4',
         paddingBottom: 30
+    },
+    seasonCard: {
+        flexDirection: 'row', 
+        alignItems: 'center', 
+        justifyContent: 'space-around',
+        paddingTop: 20, 
+        paddingBottom: 20
     }
 })
