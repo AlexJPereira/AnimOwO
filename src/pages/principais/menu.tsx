@@ -1,10 +1,6 @@
 import * as React from 'react';
-import { createDrawerNavigator, DrawerItem } from '@react-navigation/drawer';
-import { NavigationContainer } from '@react-navigation/native';
-import { useNavigation } from '@react-navigation/native'; 
 import { Text } from 'react-native';
-import { 
-    useWindowDimensions,
+import {
     TouchableOpacity,
     View, 
     StyleSheet,
@@ -12,16 +8,8 @@ import {
 } from 'react-native';
 
 import { RootStackNavigator } from '../rootStackNavigator';
-import { Button } from 'react-native'; 
 import { Ionicons } from '@expo/vector-icons';
-import { MaterialIcons } from '@expo/vector-icons'; 
 import { FontAwesome5 } from '@expo/vector-icons';
-
-import Configuracoes from '../mais/configuracoes';
-import Downloads from '../mais/downloads';
-import Perfil from '../principais/perfil'; 
-import ListaCompleta from '../mais/lista-completa';
-import Sobre from '../mais/sobre';
 
 import NavBar from '../../components/navBar';
 

@@ -5,7 +5,8 @@ import {
     TouchableOpacity,
     View,
     Button, 
-    TextInput } from 'react-native';
+    TextInput,
+    GestureResponderEvent } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Modal from 'react-native-modal';
 
@@ -15,11 +16,14 @@ import text from '../styles/text';
 
 
 interface EpisodeProps {
-    value: number, 
+    value: number,
+    cancelFunction: () => Promise<any>,
+    saveFunction: () => Promise<any>
+    watchFunction: () => Promise<any>
 }
 
 
-export default function EpisodeCard({value}:EpisodeProps){
+export default function EpisodeCard(props: EpisodeProps){
 
     const [shouldShow, setShouldShow] = useState(false);
     const [isVisible, setVisible] = useState(false);
@@ -40,10 +44,16 @@ export default function EpisodeCard({value}:EpisodeProps){
                         </Text>
                     </View>
                     <View style={ComponentStyle.modalConfirmation}> 
-                        <TouchableOpacity onPress={()=>{setVisible(false)}}>
+                        <TouchableOpacity onPress={async ()=>{
+                            await props.cancelFunction()
+                            setVisible(false)
+                        }}>
                             <Text style={textStyle.principal}> Cancelar </Text>  
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={()=>{setVisible(false)}}>  
+                        <TouchableOpacity onPress={async ()=>{
+                            await props.saveFunction()
+                            setVisible(false)
+                        }}>  
                             <Text style={textStyle.principal}> Salvar </Text>
                         </TouchableOpacity>
                     </View>
@@ -52,7 +62,7 @@ export default function EpisodeCard({value}:EpisodeProps){
             <TouchableOpacity 
                 style={ComponentStyle.titleBar}
                 onPress={() => setShouldShow(!shouldShow)}>
-                <Text style={textStyle.principal}> Episodio {value} </Text>
+                <Text style={textStyle.principal}> Episodio {props.value} </Text>
                 {shouldShow ? (
                     <Ionicons name="chevron-up" size={24} color="white" />
                 ):  <Ionicons name="chevron-down" size={24} color="white" />}

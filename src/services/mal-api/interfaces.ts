@@ -54,6 +54,10 @@ export type rankingListResponse = {
         next: string
     }
 }
+export type userListResponse = {
+    data: { node: animeDetailsResponse }[],
+    paging: { next: string }
+}
 export type animeDetailsResponse = {
     "alternative_titles": {
       "en": string,
@@ -136,6 +140,49 @@ export type animeDetailsResponse = {
     "title": string,
     "updated_at": string,
 }
+export const animeDetailsInitialValues: animeDetailsResponse = {
+    alternative_titles: {en: "", ja: "", synonyms: []},
+    average_episode_duration: 0,
+    background: "",
+    broadcast: {day_of_the_week: "", start_time: ""},
+    created_at: "",
+    end_date: "",
+    genres: [],
+    id: 0,
+    main_picture: {large: "", medium: ""},
+    mean: 0,
+    media_type: "",
+    my_list_status: {is_rewatching: false, num_episodes_watched: 0, score: 0, status: "", updated_at: ""},
+    nsfw: "",
+    num_episodes: 0,
+    num_list_users: 0,
+    num_scoring_users: 0,
+    pictures: [],
+    popularity: 0,
+    rank: 0,
+    rating: "",
+    recommendations: [],
+    related_anime: [],
+    related_manga: [],
+    source: "",
+    start_date: "",
+    start_season: {season: "", year: 0},
+    statistics: {
+        num_list_users: 0,
+        status: {
+            completed: "",
+            dropped: "",
+            on_hold: "",
+            plan_to_watch: "",
+            watching: "",
+        },
+    },
+    status: "",
+    studios: [],
+    synopsis: "",
+    title: "",
+    updated_at: "",
+}
 
 /* NODES */
 export type genericAnimeNode = {
@@ -145,17 +192,17 @@ export type genericAnimeNode = {
             large: string,
             medium: string
         }
+        title: string
     },
-    title: string
 }
 export type rankingNode = {
     node: {
-      id: number,
-      main_picture: {
-        large: string,
-        medium: string,
-      },
-      title: string,
+        id: number,
+        main_picture: {
+          large: string,
+          medium: string,
+        },
+        title: string,
     },
     ranking: {
       "rank": number,

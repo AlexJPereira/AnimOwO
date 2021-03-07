@@ -3,8 +3,8 @@ import api from './axios'
 import MalApi from './'
 import { stringify } from 'querystring'
 import {
-    userResponse, genericListResponse,
-    listStatus, listSort, updateAnimeParams, userFields
+    userResponse, genericListResponse, userListResponse,
+    listStatus, listSort, updateAnimeParams, userFields, animeFields
 } from './interfaces'
 
 /** Retorna algumas informações do usuário */
@@ -34,10 +34,11 @@ export async function getUserList(this: MalApi, status: listStatus, sort: listSo
                 status,
                 sort,
                 offset,
-                limit
+                limit,
+                fields: animeFields.toString()
             }
         })
-        const list = response.data as genericListResponse
+        const list = response.data as userListResponse
         return list
     }catch(error){
         printError("getUserList()", error)

@@ -14,3 +14,7 @@ export async function getValue(key: possibleSecureValues){
 export async function setValue(key: possibleSecureValues, value: string){
     return await SecureStore.setItemAsync(key, value)
 }
+
+export async function removeValue(key: possibleSecureValues){
+    return await SecureStore.deleteItemAsync(key)
+}

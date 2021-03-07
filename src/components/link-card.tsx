@@ -37,7 +37,7 @@ export default function LinkCard(){
                 {}
                 {shouldShow ? (
                     <View> 
-                        <Text style={componentStyle.textStyle}> Link adicionado por Wykke</Text>
+                        <Text style={componentStyle.textStyle}> Link adicionado por Wykke </Text>
                         <TouchableOpacity>
                             <Text style={componentStyle.textStyle}> https://urllink.com </Text>
                         </TouchableOpacity> 

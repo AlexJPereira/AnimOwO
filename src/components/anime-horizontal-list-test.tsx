@@ -11,14 +11,14 @@ const SteinsGate = require('../app-assets/animes-tests/steinsgate.jpg')
 export default function AnimeHorizontalListTest(){
     return (
         <AnimeHorizontalList>
-            <AnimeCard image={SteinsGate} name="Steins Gate"/>
-            <AnimeCard image={FMA} name="Fullmetal Alchemist"/>
-            <AnimeCard image={Gintama} name="Gintama"/>
-            <AnimeCard image={HunterXHunter} name="Hunter X Hunter"/>
-            <AnimeCard image={SteinsGate} name="Steins Gate"/>
-            <AnimeCard image={FMA} name="Fullmetal Alchemist"/>
-            <AnimeCard image={Gintama} name="Gintama"/>
-            <AnimeCard image={HunterXHunter} name="Hunter X Hunter"/>
+            <AnimeCard id={9253} image={SteinsGate} name="Steins Gate"/>
+            <AnimeCard id={9253} image={FMA} name="Fullmetal Alchemist"/>
+            <AnimeCard id={9253} image={Gintama} name="Gintama"/>
+            <AnimeCard id={9253} image={HunterXHunter} name="Hunter X Hunter"/>
+            <AnimeCard id={9253} image={SteinsGate} name="Steins Gate"/>
+            <AnimeCard id={9253} image={FMA} name="Fullmetal Alchemist"/>
+            <AnimeCard id={9253} image={Gintama} name="Gintama"/>
+            <AnimeCard id={9253} image={HunterXHunter} name="Hunter X Hunter"/>
         </AnimeHorizontalList>
     )
 }

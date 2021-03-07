@@ -1,4 +1,4 @@
-import AuthSession from 'expo-auth-session'
+import AuthSession, { generateHexStringAsync, exchangeCodeAsync } from 'expo-auth-session'
 import MalApi from './'
 import * as Store from '../store'
 import api from './axios'
@@ -38,6 +38,14 @@ export async function login(this: MalApi){
     //this.printTokens()
 }
 
+export async function logoff(this: MalApi){
+    await Store.removeValue('acessToken')
+    await Store.removeValue('authCode')
+    await Store.removeValue('codeChallenge')
+    await Store.removeValue('codeVerifier')
+    await Store.removeValue('refreshToken')
+}
+
 /** Checa se ja existe um `code challenge`, caso contrário faz a requisição de um novo */
 export async function checkCodeChallenge(this: MalApi){
     const codeChallenge = await Store.getValue('codeChallenge')
@@ -55,7 +63,7 @@ export async function checkCodeChallenge(this: MalApi){
  * É recomendado o uso da função `checkCodeChallenge` ou `login` ao invés dessa
 */
 export async function getNewCodeChallenge(this: MalApi){
-    const codeChallenge = await AuthSession.generateHexStringAsync(43)
+    const codeChallenge = await generateHexStringAsync(43)
     await Store.setValue('codeChallenge', codeChallenge)
     this.codeChallenge = codeChallenge
     this.authAcessConfig.codeChallenge = this.codeChallenge
@@ -118,7 +126,7 @@ export async function checkAcessToken(this: MalApi){
  * É recomendado o uso da função `checkAcessToken` ou `login` ao invés dessa
 */
 export async function getNewAcessToken(this: MalApi){
-    const response = await AuthSession.exchangeCodeAsync(this.tokenAcessConfig, this.discovery)
+    const response = await exchangeCodeAsync(this.tokenAcessConfig, this.discovery)
     this.acessToken = response.accessToken
     this.refreshToken = response.refreshToken ? response.refreshToken : ""
     await Store.setValue('acessToken', this.acessToken)

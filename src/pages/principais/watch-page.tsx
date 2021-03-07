@@ -5,7 +5,7 @@ import {
     Image, 
     Text,
     Dimensions,
-    Button } from 'react-native';
+} from 'react-native';
 
 import { RouteProp } from '@react-navigation/native';
 import { RootStackPagesProps } from '../rootStackNavigator';
@@ -15,7 +15,7 @@ import EpisodeCard from '../../components/episode-card';
 import { ScrollView } from 'react-native-gesture-handler';
 
 export type AnimePageProps = {
-    route: RouteProp<RootStackPagesProps, 'link-page'>
+    route: RouteProp<RootStackPagesProps, 'watch-page'>
 }
 
 
@@ -25,37 +25,28 @@ const screenHeight = Dimensions.get('screen').height;
 
 export default function AnimePage(props: AnimePageProps){
 
-    const params = props.route.params
+    const anime = props.route.params.anime
 
+    async function cancelFunction(episode: number){
+        alert(episode)
+    }
+    
+    const episodeList = []
+    for(let episode=1; episode<=anime.num_episodes; episode++){
+        episodeList.push(<EpisodeCard watchFunction={async ()=>{}} cancelFunction={()=>cancelFunction(episode)} saveFunction={async ()=>{}} value={episode} key={episode}/>)
+    }
+    
     return (
         <View style={PageStyle.mainStyle}>
             <NavBar/>
             <View style={PageStyle.cardStyle}> 
-                <Image source={params.animeImage} style={PageStyle.imageStyle}></Image>
+                <Image source={{uri: anime.main_picture.large}} style={PageStyle.imageStyle}></Image>
                 <View style={PageStyle.titleCard}>
-                    <Text style={PageStyle.titleStyle}>{params.animeName}</Text>
-                    <Text style={PageStyle.titleStyle}> Temporada {params.animeSeason} </Text>
+                    <Text style={PageStyle.titleStyle}>{anime.title}</Text>
                 </View>
             </View>
             <ScrollView>
-                <EpisodeCard value={1}/>
-                <EpisodeCard value={2}/>
-                <EpisodeCard value={3}/>
-                <EpisodeCard value={4}/>
-                <EpisodeCard value={5}/>
-                <EpisodeCard value={7}/>
-                <EpisodeCard value={8}/>
-                <EpisodeCard value={9}/>
-                <EpisodeCard value={10}/>
-                <EpisodeCard value={11}/>
-                <EpisodeCard value={12}/>
-                <EpisodeCard value={13}/>
-                <EpisodeCard value={14}/>
-                <EpisodeCard value={15}/>
-                <EpisodeCard value={16}/>
-                <EpisodeCard value={17}/>
-                <EpisodeCard value={18}/>
-                <EpisodeCard value={19}/>
+                { episodeList }
             </ScrollView>
         </View>
     )
