@@ -19,7 +19,11 @@ export default function AnimeCard(props: AnimeCardProps){
     }
 
     return(
-        <TouchableOpacity onPress={()=>RootStackNavigator.navigate('anime-page', {animeName: props.name? props.name : 'name error'})} style={animeCardStyle.animeCard}>
+        <TouchableOpacity 
+            onPress={()=>RootStackNavigator.navigate('anime-page', 
+                                                     {animeName: props.name ? props.name : 'name error', 
+                                                      animeImage: props.image}
+                                                    )} style={animeCardStyle.animeCard}>
             <Image style={animeCardStyle.animeImage} source={props.image}/>
             <AnimeName/>
         </TouchableOpacity>

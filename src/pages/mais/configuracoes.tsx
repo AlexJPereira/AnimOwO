@@ -1,11 +1,12 @@
 import React from 'react'; 
 import { View } from 'react-native';
-import SearchBar from '../../components/search-bar';
+import LinkCard from '../../components/link-card';
 
 export default function Configuracoes(){
     return (
         <View>
-            <SearchBar></SearchBar>
+            <LinkCard />
+            <LinkCard />
         </View>
     )
 }
