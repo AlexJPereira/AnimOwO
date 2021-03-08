@@ -6,10 +6,6 @@ import NavBar from '../../components/navBar'
 import AnimeCardDetails from '../../components/anime-card-details'
 import { malApi } from '../../services/global'
 
-const FMA = require('../../app-assets/animes-tests/fma.jpg')
-const Gintama = require('../../app-assets/animes-tests/gintama.jpg')
-const HunterXHunter = require('../../app-assets/animes-tests/hunterxhunter.jpg')
-const SteinsGate = require('../../app-assets/animes-tests/steinsgate.jpg')
 
 export default function PlanoAssistir(){
 
