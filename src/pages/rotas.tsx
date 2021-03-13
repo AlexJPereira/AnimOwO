@@ -16,6 +16,7 @@ import colorStyle from '../styles/color'
 import Login from './principais/login'
 import Home from './principais/home'
 import Perfil from './principais/perfil'
+import Pesquisa from './principais/search'
 import AnimePage from './principais/anime-page'
 import WatchPage from './principais/watch-page'
 
@@ -134,6 +135,7 @@ export function StackNavigator(){
                 <AppStack.Screen name={pagesNames.login} component={Login}/>
                 <AppStack.Screen name={pagesNames.home} component={TabNavigator}/>
                 <AppStack.Screen name={pagesNames.perfil} component={Perfil}/>
+                <AppStack.Screen name={pagesNames.pesquisa} component={Pesquisa}/>
                 <AppStack.Screen name={pagesNames.animePage} component={AnimePage}/>
                 <AppStack.Screen name={pagesNames.watchPage} component={WatchPage} />
                 <AppStack.Screen name={pagesNames.configuracoes} component={Configuracoes}/>

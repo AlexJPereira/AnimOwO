@@ -17,7 +17,7 @@ export default function NavBar(){
     return(
         <View>
             <View style={navBarStyle.navBar}>
-                <TouchableOpacity onPress={() => setShouldShow(!shouldShow)}>
+                <TouchableOpacity onPress={() => {RootStackNavigator.navigate('pesquisa')}}>
                     <Ionicons name="search" size={24} color="white"/>
                 </TouchableOpacity>
                 <Image style={navBarStyle.logo} source={LogoCompleto}></Image>
@@ -26,8 +26,6 @@ export default function NavBar(){
                 </TouchableOpacity>
             </View>
             <View>
-                {}
-                {shouldShow ? (<SearchBar/>) : null}
             </View>
         </View>
     )
