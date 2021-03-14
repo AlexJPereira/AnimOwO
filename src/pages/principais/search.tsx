@@ -21,8 +21,8 @@ export default function Search(){
 
     async function getSearch(term:string){
         setState(term);
-        if(term){
-            const searchResponse = await malApi.searchAnime(term);
+        if(term && term.length > 2){
+            const searchResponse = await malApi.searchAnime(term, 100);
             setResponse({
                 resultado: searchResponse ? searchResponse.data.map((element) => ({
                     id: element.node.id,
@@ -50,9 +50,24 @@ export default function Search(){
                 style={PageStyle.barStyle}
                 inputStyle={{color:'#fff'}}
             />
-            <ScrollView >
-                {response.resultado.map((element, index) => (<AnimeCard key={index} id={element.id} image={element.image} name={element.name}/>))}
-            </ScrollView>
+
+            <FlatList
+                contentContainerStyle={PageStyle.listStyle}
+                numColumns={3}
+                data={response.resultado}
+                renderItem={
+                    (obj) => {
+                        return(
+                            <View style={{width:'33%', alignItems: 'center', paddingVertical: 20}}> 
+                                <AnimeCard key={obj.item.id} id={obj.item.id} image={obj.item.image} name={obj.item.name}/>
+                            </View>
+                        )
+                    }
+                }
+            >
+
+            </FlatList>
+            
         </View>
     )
 }
@@ -70,7 +85,9 @@ const PageStyle = StyleSheet.create({
     iconStyle: { 
         color: 'white'
     }, 
-    listStyle:{ 
-        flexDirection: 'row'
+    listStyle:{
+        justifyContent: 'space-around',
+        paddingBottom: 100
     }
+
 })

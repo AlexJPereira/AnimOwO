@@ -59,6 +59,41 @@ export default function EpisodeCard(props: EpisodeProps){
                 onSwipeComplete={()=>{setVisible(false)}}
                 isVisible={isVisible}>
                 <View style={ComponentStyle.modalStyle}>
+                    <Text style={ComponentStyle.textStyle}> Editar Link </Text>
+                    <View style={ComponentStyle.editLink}> 
+                        <TextInput style={ComponentStyle.textInputStyle}/>
+                        <TouchableOpacity>
+                            <Ionicons name="pencil" size={24} color="white" />
+                        </TouchableOpacity>
+                        <TouchableOpacity>
+                            <Ionicons name="trash" size={24} color="white" />
+                        </TouchableOpacity>
+                    </View>
+                    <Text style={ComponentStyle.textStyle}>
+                        Você já possui um link cadastrado para esse episódio.
+                    </Text>
+                    <View style={ComponentStyle.modalConfirmation}> 
+                        <TouchableOpacity onPress={async ()=>{
+                            await props.cancelFunction()
+                            setVisible(false)
+                        }}>
+                            <Text style={ComponentStyle.textStyle}> Cancelar </Text>  
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={async ()=>{
+                            await props.saveFunction()
+                            setVisible(false)
+                        }}>  
+                            <Text style={ComponentStyle.textStyleHighlight}> Salvar </Text>
+                        </TouchableOpacity>
+                    </View>
+                </View> 
+            </Modal>
+            <Modal
+                onBackdropPress={()=>{setVisible(false)}}
+                swipeDirection={['down', 'up']}
+                onSwipeComplete={()=>{setVisible(false)}}
+                isVisible={false}>
+                <View style={ComponentStyle.modalStyle}>
                     <Text style={ComponentStyle.textStyle}> Cadastrar Link </Text>
                     <TextInput style={ComponentStyle.textInputStyle}/>
                     <View style={ComponentStyle.elementStyle}> 
@@ -166,7 +201,8 @@ const ComponentStyle = StyleSheet.create({
     }, 
     textInputStyle:{
         backgroundColor: "#ffffff", 
-        color: 'black'
+        color: 'black', 
+        width: '85%'
     }, 
     elementStyle:{
         paddingVertical: 10
@@ -179,5 +215,8 @@ const ComponentStyle = StyleSheet.create({
         height: 65, 
         alignItems: 'center', 
         justifyContent: 'center'
+    }, 
+    editLink:{
+        flexDirection: 'row'
     }
 })
