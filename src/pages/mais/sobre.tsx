@@ -12,7 +12,7 @@ const logo = require('../../app-assets/logo/Logo-Icone.png')
 export default function Sobre(){
     const _handlePressButtonAsync = async (address:string) => {
         let result = await WebBrowser.openBrowserAsync(address);
-      };
+    };
     return (
         <View style={PageStyle.viewStyle}>
             <TouchableOpacity 

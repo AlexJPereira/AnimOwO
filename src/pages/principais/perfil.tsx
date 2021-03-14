@@ -1,17 +1,17 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import { 
     View, 
     ScrollView, 
     Text, 
-    StyleSheet} from 'react-native'
-import { useNavigation } from '@react-navigation/native'
+    StyleSheet} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
-import NavBar from '../../components/navBar'
-import AnimeHorizontalListTest from '../../components/anime-horizontal-list-test'
-import Button from '../../components/button'
-import pagesNames from '../pagesNames'
-import ProfileCard from '../../components/profile-card'
-import { malApi } from '../../services/global'
+import NavBar from '../../components/navBar';
+import AnimeHorizontalListTest from '../../components/anime-horizontal-list-test';
+import Button from '../../components/button';
+import pagesNames from '../pagesNames';
+import ProfileCard from '../../components/profile-card';
+import { malApi } from '../../services/global';
 
 
 export default function Perfil(){

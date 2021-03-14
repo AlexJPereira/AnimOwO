@@ -42,7 +42,7 @@ export default function AnimePage(props: AnimePageProps){
             <View style={PageStyle.cardStyle}> 
                 <Image source={{uri: anime.main_picture.large}} style={PageStyle.imageStyle}></Image>
                 <View style={PageStyle.titleCard}>
-                    <Text style={PageStyle.titleStyle}>{anime.title}</Text>
+                    <Text style={PageStyle.titleStyle} ellipsizeMode='tail' numberOfLines={5}>{anime.title}</Text>
                 </View>
             </View>
             <ScrollView>
@@ -58,10 +58,11 @@ const PageStyle = StyleSheet.create({
         maxHeight: screenHeight
     },
     cardStyle:{
-        justifyContent: 'space-around',
+        justifyContent: 'space-between',
         flexDirection: 'row',
         paddingTop: 30, 
-        paddingBottom: 30
+        paddingBottom: 30,
+        paddingHorizontal: 20 
     },
     imageStyle:{
         width: 104*1.25, 
@@ -77,6 +78,7 @@ const PageStyle = StyleSheet.create({
         justifyContent:'space-around'
     },
     titleStyle:{
+        paddingLeft: 30,
         textAlign: 'left',
         textAlignVertical: 'center',
         fontFamily: 'Roboto',

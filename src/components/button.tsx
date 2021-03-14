@@ -2,6 +2,8 @@ import React from 'react'
 import { View, Button, Text, GestureResponderEvent } from 'react-native'
 import { StyleSheet, TouchableOpacity} from 'react-native'
 
+import colorStyle from '../styles/color'; 
+
 interface ButtonProps {
     title: string, 
     onPress: (event: GestureResponderEvent) => void
@@ -26,7 +28,8 @@ const buttonStyle = StyleSheet.create({
         display: 'flex',
         justifyContent: 'center',
         alignContent: 'center',
-        textAlign: 'center'
+        textAlign: 'center',
+        backgroundColor: colorStyle.corBackground.color
     },
     textButton: {
         fontFamily: 'Roboto',

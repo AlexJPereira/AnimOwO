@@ -10,7 +10,8 @@ export type RootStackPagesProps = {
     'lista-completa': any,
     'downloads': any, 
     'sobre': any, 
-    'configuracoes': any
+    'configuracoes': any, 
+    'pesquisa': any
 }
 
 export var RootStackNavigator: StackNavigationProp<RootStackPagesProps, 'home'>
