@@ -5,7 +5,6 @@ import { createStackNavigator, StackNavigationProp } from '@react-navigation/sta
 import { Ionicons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons'; 
 import { FontAwesome5 } from '@expo/vector-icons';
-import { createDrawerNavigator } from '@react-navigation/drawer';
 
 import { RootStackPagesProps, setRootStackNavigator } from './rootStackNavigator'
 
