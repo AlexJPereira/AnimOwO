@@ -1,3 +1,4 @@
+import axios from 'axios'
 import { printError } from '../error'
 import api from './axios'
 import MalApi from './'
@@ -103,5 +104,14 @@ export async function getSuggestedAnime(this: MalApi, limit?: number, offset?: n
         printError("getSuggestedAnime()", error)
         return undefined
     }
+}
+
+/**
+ * Retorna a lista de lançamentos
+ */
+export async function getRelease(this: MalApi){
+    const mainPage = await axios.get('https://myanimelist.net/')
+    const mainPageText = mainPage.data.toString() as string
+    return mainPageText.indexOf('class="latest_updated_h3"')
 }
 

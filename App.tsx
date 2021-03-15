@@ -1,9 +1,31 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StackNavigator } from './src/pages/rotas'
+import { View } from 'react-native'
 
+import MalApi from './src/services/mal-api'
+import { setMalApi, malApi } from './src/services/global'
 
 export default function App() {
-  return (
-    <StackNavigator/>
-  )
+    setMalApi(new MalApi())
+    
+    const [state, setState] = useState({
+        logando: true,
+        logado: false
+    })
+
+    async function checkLogin() {
+        if(await malApi.isLoggedIn()){
+            setState({ logando: false, logado: true })
+        }else{
+            setState({ logando: false, logado: false })
+        }
+    }
+
+    useEffect(()=>{
+        checkLogin()
+    }, [])
+
+    return (
+        state.logando ? <View></View> : <StackNavigator initialRouteName={state.logado ? "home" : "login"}/>
+    )
 }

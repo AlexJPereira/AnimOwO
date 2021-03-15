@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
     View, 
     ScrollView, 
@@ -24,7 +24,6 @@ export default function Perfil(){
         qtdAssistindo: 0,
         qtdPlanoAssistir: 0
     })
-    getUser()
     
     async function logoff(){
         await malApi.logoff()
@@ -33,16 +32,22 @@ export default function Perfil(){
 
     async function getUser(){
         const user = await malApi.getUserProfileInfo()
-        if(user){
-            setState({...state,
-                username: user.name,
-                profilePic: user.picture == "" ? state.profilePic : user.picture,
-                qtdCompletos: user.anime_statistics.num_items_completed,
-                qtdAssistindo: user.anime_statistics.num_items_watching,
-                qtdPlanoAssistir: user.anime_statistics.num_items_plan_to_watch
-            })
-        }
+        try{
+            if(user){
+                setState({...state,
+                    username: user.name,
+                    profilePic: user.picture == "" ? state.profilePic : user.picture,
+                    qtdCompletos: user.anime_statistics.num_items_completed,
+                    qtdAssistindo: user.anime_statistics.num_items_watching,
+                    qtdPlanoAssistir: user.anime_statistics.num_items_plan_to_watch
+                })
+            }
+        }catch(error){ }
     }
+
+    useEffect(()=>{
+        getUser()
+    }, [])
 
     return (
         <View> 

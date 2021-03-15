@@ -44,6 +44,7 @@ export async function logoff(this: MalApi){
     await Store.removeValue('codeChallenge')
     await Store.removeValue('codeVerifier')
     await Store.removeValue('refreshToken')
+    this.codeChallenge = this.codeVerifier = this.authCode = this.acessToken = this.refreshToken = ""
 }
 
 /** Checa se ja existe um `code challenge`, caso contrário faz a requisição de um novo */

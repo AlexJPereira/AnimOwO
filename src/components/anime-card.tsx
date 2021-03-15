@@ -21,7 +21,7 @@ export default function AnimeCard(props: AnimeCardProps){
 
     return(
         <TouchableOpacity 
-            onPress={()=>RootStackNavigator.navigate('anime-page', {id: props.id})} style={animeCardStyle.animeCard}>
+            onPress={()=>RootStackNavigator.push('anime-page', {id: props.id})} style={animeCardStyle.animeCard}>
             <Image style={animeCardStyle.animeImage} source={props.image}/>
             <AnimeName/>
         </TouchableOpacity>
