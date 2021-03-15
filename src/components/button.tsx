@@ -6,22 +6,28 @@ import colorStyle from '../styles/color';
 
 interface ButtonProps {
     title: string, 
-    onPress: (event: GestureResponderEvent) => void
+    onPress: (event: GestureResponderEvent) => void,
+    disable?: boolean
 }
 
-export default function CustomButton({title, onPress} : ButtonProps){
+export default function CustomButton(props: ButtonProps){
     return (
-        <TouchableOpacity onPress={onPress} style={buttonStyle.defaultButton}>
-            <Text style={buttonStyle.textButton}>{title}</Text>
+        <TouchableOpacity 
+            onPress={props.onPress} 
+            style={props.disable ? buttonStyle.defaultButtonDisabled : buttonStyle.defaultButtonEnabled } 
+            disabled={props.disable}>
+            <Text style={props.disable ? buttonStyle.textButtonDisabled : buttonStyle.textButtonEnabled}>
+                {props.title}
+            </Text>
         </TouchableOpacity>
     )
 }
-const buttonStyle = StyleSheet.create({
+
+const defaultStyle = StyleSheet.create({
     defaultButton: {
         height: 45,
         width: 167,
         borderRadius: 7,
-        borderColor: '#AB3962',
         borderStyle: 'solid',
         borderWidth: 5,
         alignItems: 'center',
@@ -31,17 +37,36 @@ const buttonStyle = StyleSheet.create({
         textAlign: 'center',
         backgroundColor: colorStyle.corBackground.color
     },
-    textButton: {
+    defaultText: {
         fontFamily: 'Roboto',
         fontStyle: 'normal',
         fontWeight: "600",
         fontSize: 15,
         lineHeight: 23,
-        letterSpacing: 5,
-        color: '#AB3962', 
+        letterSpacing: 5, 
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         textAlign: 'center'
+    }
+
+})
+
+const buttonStyle = StyleSheet.create({
+    defaultButtonEnabled: {
+        ...defaultStyle.defaultButton,
+        borderColor: '#AB3962'
+    },
+    defaultButtonDisabled: {
+        ...defaultStyle.defaultButton,
+        borderColor: '#706f6b'
+    },
+    textButtonEnabled: {
+        ...defaultStyle.defaultText,
+        color: '#AB3962',
+    },
+    textButtonDisabled: {
+        ...defaultStyle.defaultText,
+        color: '#706f6b',
     }
 })

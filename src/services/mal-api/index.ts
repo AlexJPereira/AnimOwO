@@ -69,5 +69,5 @@ export default class MalApi{
     getAnimeRankingList = AnimeFunc.getAnimeRankingList.bind(this)
     getSeasonalAnime = AnimeFunc.getSeasonalAnime.bind(this)
     getSuggestedAnime = AnimeFunc.getSuggestedAnime.bind(this)
-    
+    getReleases = AnimeFunc.getRelease.bind(this)
 }

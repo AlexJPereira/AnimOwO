@@ -1,9 +1,8 @@
-import React from 'react'
-import { View, Text, StyleSheet, Image} from 'react-native'
+import React, { useState } from 'react'
+import { View, Text, StyleSheet, Image } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
-import MalApi from '../../services/mal-api'
-import { setMalApi, malApi } from '../../services/global'
+import { malApi } from '../../services/global'
 
 import textStyle from '../../styles/text'
 import Button from '../../components/button'
@@ -12,7 +11,11 @@ import Link from '../../components/link'
 const LogoCompleto = require('../../app-assets/logo/Logo-OWO-MAL.png')
 
 export default function Login(){
-    setMalApi(new MalApi())
+
+    const [state, setState] = useState({
+        isLogging: false
+    })
+
     const navigator = useNavigation()
 
     function navigateToHome(){
@@ -21,15 +24,14 @@ export default function Login(){
 
     async function login(){
         if(!(await malApi.isLoggedIn())){
-            console.log("não está logado, logando...")
-            await malApi.login()
-        }else{
-            console.log("ja está logado")
-        }
-        if(await malApi.isLoggedIn()){
-            const test = await malApi.getUserProfileInfo()
-            console.log(test)
-            //navigateToHome()
+            setState({ isLogging: true })
+            try{
+                await malApi.login()
+                navigateToHome()
+            }catch(error){
+                setState({ isLogging: false })
+                console.log(error)
+            }
         }
     }
 
@@ -39,7 +41,7 @@ export default function Login(){
             <Text style={textStyle.principal}>
                 Deseja entrar no aplicativo com sua conta do My Anime List?
             </Text>
-            <Button onPress={login} title="ENTRE"></Button>
+            <Button onPress={login} title="ENTRE" disable={state.isLogging}></Button>
             <Link onPress={navigateToHome} title="Continuar como convidado"></Link>
         </View>
     )

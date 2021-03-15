@@ -128,10 +128,14 @@ export function TabNavigator(props: TabkNavigatorProps){
     )
 }
 
-export function StackNavigator(){
+export interface StackNavigatorProps{
+    initialRouteName: "home" | "login"
+}
+
+export function StackNavigator(props: StackNavigatorProps){
     return (
         <NavigationContainer theme={MyTheme}>
-            <AppStack.Navigator screenOptions={{ headerShown: false }} initialRouteName={pagesNames.login}>
+            <AppStack.Navigator screenOptions={{ headerShown: false }} initialRouteName={props.initialRouteName}>
                 <AppStack.Screen name={pagesNames.login} component={Login}/>
                 <AppStack.Screen name={pagesNames.home} component={TabNavigator}/>
                 <AppStack.Screen name={pagesNames.perfil} component={Perfil}/>
