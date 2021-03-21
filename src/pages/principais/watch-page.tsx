@@ -10,13 +10,13 @@ import { ScrollView } from 'react-native-gesture-handler';
 
 import { RouteProp } from '@react-navigation/native';
 import { RootStackPagesProps } from '../rootStackNavigator';
+import * as AnimowoApi from '../../services/animowo-api'
 
 import NavBar from '../../components/navBar'
 import EpisodeCard from '../../components/episodes/episode-card';
 import ModalEpisodeList from '../../components/episodes/modal-episode-list'
 import ModalNewEpisode from '../../components/episodes/modal-new-episode'
 import LinkCard from '../../components/link-card';
-
 
 export type AnimePageProps = {
     route: RouteProp<RootStackPagesProps, 'watch-page'>
@@ -50,10 +50,10 @@ export default function AnimePage(props: AnimePageProps){
     }
 
     async function getEpisodeLinks(episodeNumber: number){
-        const testList = [] as ReactElement[]
-        testList.push(<LinkCard key={1}/>)
-        testList.push(<LinkCard key={2}/>)
-        return testList
+        const episodes = await AnimowoApi.getAnimeLinks(anime.id, episodeNumber)
+        return episodes.map((episode, index) => {
+            return <LinkCard episode={episode} key={index}/>
+        })
     }
     
     return (
@@ -61,7 +61,8 @@ export default function AnimePage(props: AnimePageProps){
             <ModalNewEpisode
                 isVisible={isLinkManagerVisible} 
                 setVisible={setLinkManagerVisible} 
-                episodeNumber={currentModalEpisode}/>
+                episodeNumber={currentModalEpisode}
+                animeId={anime.id}/>
             <ModalEpisodeList setVisible={setWatchListVisible} watchVisible={isWatchListVisible}>
                 { currentModalEpisodeList }
             </ModalEpisodeList>

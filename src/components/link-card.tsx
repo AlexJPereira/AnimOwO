@@ -8,16 +8,15 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import * as WebBrowser from 'expo-web-browser';
 
+import { getAnimeResponse } from '../services/animowo-api/interfaces'
 
 import colorStyle from '../styles/color';
 
-//interface LinkProps {
-//    title: string, 
-//    onPress: (event: GestureResponderEvent) => void
-//}
+export interface LinkCardProps{
+    episode: getAnimeResponse
+}
 
-//export default function LinkCard({title, onPress} : LinkProps){
-export default function LinkCard(){
+export default function LinkCard(props: LinkCardProps){
     const _handlePressButtonAsync = async (address:string) => {
         let result = await WebBrowser.openBrowserAsync(address);
     };
@@ -26,30 +25,30 @@ export default function LinkCard(){
         <View style={componentStyle.elementStyle}>
             <View style={componentStyle.titleBar}>
                 <TouchableOpacity>
-                    <Text style={componentStyle.titleStyle}> Link de Wykke </Text>
+                    <Text style={componentStyle.titleStyle}>Link de {props.episode.userName}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity>
                     <Ionicons name="chevron-up" size={24} color="white" />
                 </TouchableOpacity>
-                <Text style={componentStyle.titleStyle}> 10 </Text>
+                <Text style={componentStyle.titleStyle}>{props.episode.upVote}</Text>
                 <TouchableOpacity>
                     <Ionicons name="chevron-down" size={24} color="white" />
                 </TouchableOpacity>
-                <Text style={componentStyle.titleStyle}> 50 </Text>
+                <Text style={componentStyle.titleStyle}>{props.episode.downVote}</Text>
             </View>
             <View>
                 <View style={componentStyle.cardStyle}>  
-                    <Text style={componentStyle.textStyle}> Link adicionado por Wykke </Text>
+                    <Text style={componentStyle.textStyle}>Link adicionado por {props.episode.userName}</Text>
                     <TouchableOpacity>
                         <Text
                             ellipsizeMode='tail' 
                             numberOfLines={1}
                             style={componentStyle.linkStyle}
-                            onPress={() => _handlePressButtonAsync('https://www.youtube.com/watch?v=Mdhd7qrQlQY')}> 
-                            https://www.youtube.com/watch?v=Mdhd7qrQlQY
+                            onPress={() => _handlePressButtonAsync(props.episode.link)}> 
+                            {props.episode.link}
                         </Text>
-                    </TouchableOpacity> 
-                    <Text style={componentStyle.textStyle}> 06/03/2021 </Text>
+                    </TouchableOpacity>
+                    <Text style={componentStyle.textStyle}>{props.episode.date}</Text>
                 </View> 
             </View>
         </View>

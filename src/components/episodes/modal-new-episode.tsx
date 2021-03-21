@@ -1,18 +1,73 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Modal from 'react-native-modal';
 import { Text, TextInput, View, StyleSheet, TouchableOpacity } from 'react-native'
 import { Ionicons } from '@expo/vector-icons';
 
+import * as AnimowoApi from '../../services/animowo-api'
+
 import textStyle from '../../styles/text';
 import colorStyle from '../../styles/color'; 
+import { malApi } from '../../services/global';
 
 export interface EpisodeListProps{
     setVisible: React.Dispatch<React.SetStateAction<boolean>>,
     isVisible: boolean,
-    episodeNumber: number
+    episodeNumber: number,
+    animeId: number
 }
 
 export default function NewEpisode(props: EpisodeListProps){
+
+    const textoEpisodioJaAdicionado = 'Você já possui um link cadastrado para esse episódio.'
+    const textoNovoEpisodio = 'Adicione um link para cadastrar um novo episódio.'
+
+    const [isLoading, setLoading] = useState(true)
+    const [possuiEpisodio, setPossuiEpisodio] = useState(false)
+
+    async function confirmButton(){
+        setPossuiEpisodio(false)
+        setLoading(true)
+        props.setVisible(false)
+    }
+    
+    async function cancelButton(){
+        setPossuiEpisodio(false)
+        setLoading(true)
+        props.setVisible(false)
+    }
+
+    async function JaPossuiEpisodioCadastrado(){
+        const links = await AnimowoApi.getAnimeLinks(props.animeId, props.episodeNumber)
+        const user = await malApi.getUserProfileInfo()
+        const episode = links.find(link => link.userId === user?.id)
+        if(episode)
+            setPossuiEpisodio(true)
+        setLoading(false)
+    }
+
+    function getReactInput(){
+        return (
+            <View style={ComponentStyle.editLink}>
+                <TextInput style={ComponentStyle.textInputStyle}/>
+                {possuiEpisodio ?
+                    <TouchableOpacity>
+                        <Ionicons name="pencil" size={24} color="white" />
+                    </TouchableOpacity>
+                    : null
+                }{possuiEpisodio ?
+                    <TouchableOpacity>
+                        <Ionicons name="trash" size={24} color="white" />
+                    </TouchableOpacity>
+                    : null
+                }
+            </View>
+        )
+    }
+
+    useEffect(()=>{
+        JaPossuiEpisodioCadastrado()
+    })
+
     return(
         <Modal
             onBackdropPress={()=>{props.setVisible(false)}}
@@ -21,30 +76,16 @@ export default function NewEpisode(props: EpisodeListProps){
             isVisible={props.isVisible}>
             <View style={ComponentStyle.modalStyle}>
                 <Text style={ComponentStyle.textStyle}>Editar Link - Episódio {props.episodeNumber}</Text>
-                <View style={ComponentStyle.editLink}> 
-                    <TextInput style={ComponentStyle.textInputStyle}/>
-                    <TouchableOpacity>
-                        <Ionicons name="pencil" size={24} color="white" />
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                        <Ionicons name="trash" size={24} color="white" />
-                    </TouchableOpacity>
-                 </View>
-                 <Text style={ComponentStyle.textStyle}>
-                    Você já possui um link cadastrado para esse episódio.
+                {getReactInput()}
+                <Text style={ComponentStyle.textStyle}>
+                    {isLoading ? 'Carregando...' : (possuiEpisodio ? textoEpisodioJaAdicionado : textoNovoEpisodio)}
                 </Text>
                 <View style={ComponentStyle.modalConfirmation}> 
-                    <TouchableOpacity onPress={async ()=>{
-                        // confirmation function
-                        props.setVisible(false)
-                    }}>
-                        <Text style={ComponentStyle.textStyle}> Cancelar </Text>  
+                    <TouchableOpacity onPress={confirmButton}>
+                        <Text style={ComponentStyle.textStyle}>Cancelar</Text>  
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={async ()=>{
-                        // cancel function
-                        props.setVisible(false)
-                    }}>  
-                        <Text style={ComponentStyle.textStyleHighlight}> Salvar </Text>
+                    <TouchableOpacity onPress={cancelButton}>  
+                        <Text style={ComponentStyle.textStyleHighlight}>Salvar</Text>
                     </TouchableOpacity>
                 </View>
             </View> 

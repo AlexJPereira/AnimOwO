@@ -36,6 +36,7 @@ export async function login(this: MalApi){
         await this.checkAcessToken()
     }
     //this.printTokens()
+    //this.getUserProfileInfo().then(user => console.log(user?.id))
 }
 
 export async function logoff(this: MalApi){

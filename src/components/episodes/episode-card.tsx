@@ -20,12 +20,20 @@ export default function EpisodeCard(props: EpisodeProps){
 
     const [shouldShow, setShouldShow] = useState(false);
 
+    function showWatchListModal(){
+        props.setWatchListVisible(props.episodeNumber)
+    }
+
+    function showNewEpisodeModal(){
+        props.setLinkManagerVisible(props.episodeNumber)
+    }
+
     return (
         <View>
             <TouchableOpacity 
                 style={ComponentStyle.titleBar}
                 onPress={() => setShouldShow(!shouldShow)}>
-                <Text style={textStyle.principal}> Episodio {props.episodeNumber} </Text>
+                <Text style={textStyle.principal}>Episodio {props.episodeNumber}</Text>
                 {shouldShow ? (
                     <Ionicons name="chevron-up" size={24} color="white" />
                 ):  <Ionicons name="chevron-down" size={24} color="white" />}
@@ -35,13 +43,13 @@ export default function EpisodeCard(props: EpisodeProps){
                     <View style={ComponentStyle.innerStyle}>
                         <TouchableOpacity 
                             style={ComponentStyle.linkStyle}
-                            onPress={() => {props.setWatchListVisible(props.episodeNumber)}}>
+                            onPress={showWatchListModal}>
                             <Ionicons name="play" size={24} color="white" style={ComponentStyle.iconStyle}/>
-                            <Text  style={ComponentStyle.text}> ASSISTIR </Text>
+                            <Text  style={ComponentStyle.text}>ASSISTIR</Text>
                         </TouchableOpacity>
                         <TouchableOpacity 
                             style={ComponentStyle.linkStyle}
-                            onPress={() => {props.setLinkManagerVisible(props.episodeNumber)}}>
+                            onPress={showNewEpisodeModal}>
                             <Ionicons name="link" size={24} color="white" style={ComponentStyle.iconStyle}/>
                             <Text  style={ComponentStyle.text}>GERENCIAR LINK</Text>
                         </TouchableOpacity>

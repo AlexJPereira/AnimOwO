@@ -31,13 +31,9 @@ export default function Login(){
         console.log(user?.id)
         if(user) resp = await AnimowoApi.postAnimeLink({
             animeId: 40571,
-            date: '20/03/2021',
-            downVote: 0,
-            upVote: 1,
-            ip: '10.0.0.1',
+            numEpisode: 1,
             link: 'https://www.test.com/',
-            userId: user.id,
-            userName: user.name
+            userId: user.id
         })
         console.log("ok")
         console.log(resp)
