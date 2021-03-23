@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
     Text, 
     StyleSheet, 
@@ -8,14 +8,23 @@ import { Ionicons } from '@expo/vector-icons';
 import * as WebBrowser from 'expo-web-browser';
 
 import { getAnimeResponse } from '../services/animowo-api/interfaces'
+import { VoteType } from '../services/animowo-api/interfaces';
 
 import colorStyle from '../styles/color';
 
 export interface LinkCardProps{
-    episode: getAnimeResponse
+    episode: getAnimeResponse,
+    vote: (voteType: VoteType, dataBaseId: string) => Promise<void>
 }
 
 export default function LinkCard(props: LinkCardProps){
+
+    const [userVote, setUserVote] = useState({
+        voteType: props.episode.vote,
+        voteUpCount: props.episode.upVote,
+        voteDownCount: props.episode.downVote
+    })
+
     const _handlePressButtonAsync = async (address:string) => {
         let result = await WebBrowser.openBrowserAsync(address);
     };
@@ -26,17 +35,56 @@ export default function LinkCard(props: LinkCardProps){
         return `${date.getDate()}/${month}/${date.getFullYear()}`
     }
 
+    async function vote(voteType: VoteType){
+        let newUpVote = userVote.voteUpCount
+        let newDownVote = userVote.voteDownCount
+        let newVoteType = userVote.voteType
+
+        // caso esteja removendo votos
+        if(voteType === userVote.voteType){
+            newVoteType = ''
+            if(voteType === 'up')
+                newUpVote -= 1
+            else
+                newDownVote -= 1
+        }else{
+            if(voteType === 'up'){
+                if(userVote.voteType === 'down')
+                    newDownVote -= 1
+                newUpVote += 1
+                newVoteType = 'up'
+            }
+            else{
+                if(userVote.voteType === 'up')
+                    newUpVote -= 1
+                newDownVote += 1
+                newVoteType = 'down'
+            }
+        }
+
+        setUserVote({
+            voteDownCount: newDownVote,
+            voteType: newVoteType,
+            voteUpCount: newUpVote
+        })
+
+        props.vote(voteType, props.episode._id)
+    }
+
     return (
         <View style={componentStyle.elementStyle}>
             <View style={componentStyle.titleBar}>
-                <TouchableOpacity>
-                    <Ionicons name="chevron-up" size={24} color="white" />
+
+                <TouchableOpacity onPress={() => vote('up')}>
+                    <Ionicons name="chevron-up" size={24} color={userVote.voteType === 'up' ? colorStyle.corPrincipal.color : "white"} />
                 </TouchableOpacity>
-                <Text style={componentStyle.titleStyle}>{props.episode.upVote}</Text>
-                <TouchableOpacity>
-                    <Ionicons name="chevron-down" size={24} color="white" />
+                <Text style={componentStyle.titleStyle}>{userVote.voteUpCount}</Text>
+
+                <TouchableOpacity onPress={() => vote('down')}>
+                    <Ionicons name="chevron-down" size={24} color={userVote.voteType === 'down' ? colorStyle.corPrincipal.color : "white"} />
                 </TouchableOpacity>
-                <Text style={componentStyle.titleStyle}>{props.episode.downVote}</Text>
+                <Text style={componentStyle.titleStyle}>{userVote.voteDownCount}</Text>
+
             </View>
             <View>
                 <View style={componentStyle.cardStyle}>  
