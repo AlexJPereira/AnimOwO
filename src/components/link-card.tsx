@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { 
     Text, 
-    GestureResponderEvent, 
     StyleSheet, 
     TouchableOpacity,
     View } from 'react-native';
@@ -20,13 +19,16 @@ export default function LinkCard(props: LinkCardProps){
     const _handlePressButtonAsync = async (address:string) => {
         let result = await WebBrowser.openBrowserAsync(address);
     };
+    
+    function getDate(){
+        const date = new Date(props.episode.date)
+        const month = date.getMonth() < 10 ? '0' + date.getMonth() : date.getMonth().toString()
+        return `${date.getDate()}/${month}/${date.getFullYear()}`
+    }
 
     return (
         <View style={componentStyle.elementStyle}>
             <View style={componentStyle.titleBar}>
-                <TouchableOpacity>
-                    <Text style={componentStyle.titleStyle}>Link de {props.episode.userName}</Text>
-                </TouchableOpacity>
                 <TouchableOpacity>
                     <Ionicons name="chevron-up" size={24} color="white" />
                 </TouchableOpacity>
@@ -48,7 +50,7 @@ export default function LinkCard(props: LinkCardProps){
                             {props.episode.link}
                         </Text>
                     </TouchableOpacity>
-                    <Text style={componentStyle.textStyle}>{props.episode.date}</Text>
+                    <Text style={componentStyle.textStyle}>Adicionado: {getDate()}</Text>
                 </View> 
             </View>
         </View>

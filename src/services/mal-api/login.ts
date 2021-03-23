@@ -3,6 +3,7 @@ import MalApi from './'
 import * as Store from '../store'
 import api from './axios'
 import { printError } from '../error'
+import { setCachedUser } from '../global'
 
 export type CompleteAuthSessionResult = {
     type: 'error' | 'success';
@@ -31,6 +32,9 @@ export async function login(this: MalApi){
     await this.checkAuthCode()
     try{
         await this.checkAcessToken()
+        const user = this.getUserProfileInfo().then(user => {
+            if(user) setCachedUser(user)
+        }).catch(()=>{})  
     } catch {
         await this.getNewAuthCode()
         await this.checkAcessToken()

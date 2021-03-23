@@ -1,19 +1,20 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import Modal from 'react-native-modal';
 import { Text, TextInput, View, StyleSheet, TouchableOpacity } from 'react-native'
-import { Ionicons } from '@expo/vector-icons';
-
-import * as AnimowoApi from '../../services/animowo-api'
 
 import textStyle from '../../styles/text';
 import colorStyle from '../../styles/color'; 
-import { malApi } from '../../services/global';
 
 export interface EpisodeListProps{
-    setVisible: React.Dispatch<React.SetStateAction<boolean>>,
     isVisible: boolean,
+    setVisible: React.Dispatch<React.SetStateAction<boolean>>,
+    isLoading: boolean,
+    possuiEpisodio: boolean,
+    link: string,
     episodeNumber: number,
-    animeId: number
+    animeId: number,
+    apagarEpisodio: (episodeNumber: number) => Promise<void>,
+    salvarEpisodio: (episodeNumber: number, link: string) => Promise<void>
 }
 
 export default function NewEpisode(props: EpisodeListProps){
@@ -21,52 +22,21 @@ export default function NewEpisode(props: EpisodeListProps){
     const textoEpisodioJaAdicionado = 'Você já possui um link cadastrado para esse episódio.'
     const textoNovoEpisodio = 'Adicione um link para cadastrar um novo episódio.'
 
-    const [isLoading, setLoading] = useState(true)
-    const [possuiEpisodio, setPossuiEpisodio] = useState(false)
+    const [inputText, setInputText] = useState(props.link)
 
-    async function confirmButton(){
-        setPossuiEpisodio(false)
-        setLoading(true)
+    async function saveButton(){
+        await props.salvarEpisodio(props.episodeNumber, inputText)
         props.setVisible(false)
     }
     
     async function cancelButton(){
-        setPossuiEpisodio(false)
-        setLoading(true)
         props.setVisible(false)
     }
 
-    async function JaPossuiEpisodioCadastrado(){
-        const links = await AnimowoApi.getAnimeLinks(props.animeId, props.episodeNumber)
-        const user = await malApi.getUserProfileInfo()
-        const episode = links.find(link => link.userId === user?.id)
-        if(episode)
-            setPossuiEpisodio(true)
-        setLoading(false)
+    async function deleteButton(){
+        await props.apagarEpisodio(props.episodeNumber)
+        props.setVisible(false)
     }
-
-    function getReactInput(){
-        return (
-            <View style={ComponentStyle.editLink}>
-                <TextInput style={ComponentStyle.textInputStyle}/>
-                {possuiEpisodio ?
-                    <TouchableOpacity>
-                        <Ionicons name="pencil" size={24} color="white" />
-                    </TouchableOpacity>
-                    : null
-                }{possuiEpisodio ?
-                    <TouchableOpacity>
-                        <Ionicons name="trash" size={24} color="white" />
-                    </TouchableOpacity>
-                    : null
-                }
-            </View>
-        )
-    }
-
-    useEffect(()=>{
-        JaPossuiEpisodioCadastrado()
-    })
 
     return(
         <Modal
@@ -75,18 +45,33 @@ export default function NewEpisode(props: EpisodeListProps){
             onSwipeComplete={()=>{props.setVisible(false)}}
             isVisible={props.isVisible}>
             <View style={ComponentStyle.modalStyle}>
+
                 <Text style={ComponentStyle.textStyle}>Editar Link - Episódio {props.episodeNumber}</Text>
-                {getReactInput()}
+
+                {props.isLoading ? null : <TextInput style={ComponentStyle.textInputStyle} onChangeText={text => setInputText(text)}>{props.link}</TextInput>}
+
                 <Text style={ComponentStyle.textStyle}>
-                    {isLoading ? 'Carregando...' : (possuiEpisodio ? textoEpisodioJaAdicionado : textoNovoEpisodio)}
+                    {props.isLoading ? 'Carregando...' : (props.possuiEpisodio ? textoEpisodioJaAdicionado : textoNovoEpisodio)}
                 </Text>
+
                 <View style={ComponentStyle.modalConfirmation}> 
-                    <TouchableOpacity onPress={confirmButton}>
+
+                    {props.possuiEpisodio ? 
+                        <TouchableOpacity onPress={deleteButton}>
+                            <Text style={ComponentStyle.textStyle}>Apagar</Text>  
+                        </TouchableOpacity>
+                        : null}
+
+                    <TouchableOpacity onPress={cancelButton}>
                         <Text style={ComponentStyle.textStyle}>Cancelar</Text>  
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={cancelButton}>  
-                        <Text style={ComponentStyle.textStyleHighlight}>Salvar</Text>
-                    </TouchableOpacity>
+
+                    {props.isLoading ? null : 
+                        <TouchableOpacity onPress={saveButton}>  
+                            <Text style={ComponentStyle.textStyleHighlight}>Salvar</Text>
+                        </TouchableOpacity>
+                    }
+
                 </View>
             </View> 
         </Modal>
@@ -135,13 +120,12 @@ const ComponentStyle = StyleSheet.create({
     }, 
     modalConfirmation:{
         flexDirection: 'row', 
-        justifyContent: 'flex-end', 
+        justifyContent: 'space-around', 
         paddingEnd: 10
     }, 
     textInputStyle:{
         backgroundColor: "#ffffff", 
         color: 'black', 
-        width: '85%'
     }, 
     elementStyle:{
         paddingVertical: 10

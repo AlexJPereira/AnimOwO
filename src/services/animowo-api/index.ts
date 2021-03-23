@@ -3,11 +3,10 @@ import {
     postAnimeParams, editAnimeParams,
     getAnimeResponse, postAnimeResponse, editAnimeResponse, deleteAnimeResponse
 } from './interfaces'
-//import * as Store from '../store'
+import * as Store from '../store'
 
 async function getHeaderToken(){
-    //const token = await Store.getValue('acessToken')
-    const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjViZWVhODMwOGM5MmUzMzkwYzU2MjQ2NTcxNjZkMzJkYjNkMjRjMDNjZWU1ZDg3YjAxNThjNWM0ZWU4NGFkNTFmNmNkY2Q3OTgxY2FmMTg0In0.eyJhdWQiOiIzOGExYWQxMjM5NTJhZmFjNzJmYTg3YTZmYTA1ZDNkNiIsImp0aSI6IjViZWVhODMwOGM5MmUzMzkwYzU2MjQ2NTcxNjZkMzJkYjNkMjRjMDNjZWU1ZDg3YjAxNThjNWM0ZWU4NGFkNTFmNmNkY2Q3OTgxY2FmMTg0IiwiaWF0IjoxNjE1ODQ3MDY3LCJuYmYiOjE2MTU4NDcwNjcsImV4cCI6MTYxODUyNTQ2Nywic3ViIjoiNDgxMTI2MyIsInNjb3BlcyI6W119.Gm1ur0Wk1qwtb4o-K3XnIfe6NqcBFOezt9oTwsUhblthjZZnmBaENuXuk3SsUp3os1ei4wzthr7zwH6F8GvmGa9kLxAqGTgnldxY2LWwHXDjj5Ik0WRkiECD9eo31H-nNNc9ooSOPL7L71OYHI9Lv7RkcqTmD_tMFL9JQxr2ixUnK2k321eiS2w1KPbQ-4zQ8LvG1Xcuc7jRwRoJs9WEciprc7zO-bl2pAkbaNi1bpxkIzHWGc0G1q846-E_RkzNPqI_1xTklX-y_F6agMM1BhVleXl5kgKWbbYTTMvYJtoo__7qiZ8V42g_swEwBFT1CXYatfCMtmyPXVgK0spuMQ"
+    const token = await Store.getValue('acessToken')
     if(!token)
         return undefined
 
@@ -38,27 +37,43 @@ export async function postAnimeLink(anime: postAnimeParams){
     return response.data as postAnimeResponse
 }
 
-export async function editAnimeLink(databaseId: number, anime: editAnimeParams){
+export async function editAnimeLink(databaseId: string, anime: editAnimeParams){
     const header = await getHeaderToken()
     if(!header)
         return
 
-    const response = await api.put(`/${databaseId}`, anime, header)
+    const response = await api.put(`/${databaseId}/`, anime, header)
     return response.data as editAnimeResponse
 }
 
-export async function deleteAnimeLink(databaseId: string){
+export async function deleteAnimeLink(databaseId: string, userId: number){
     const header = await getHeaderToken()
     if(!header)
         return
 
-    const response = await api.delete(`/${databaseId}`, header)
+    const response = await api.delete(`/${databaseId}/`, {
+        ...header,
+        params: {
+            userId: userId
+        }
+    })
     return response.data as deleteAnimeResponse
 }
 
 async function test(){
-    const userId = 4811263
+    const userId = 4811263 // Wykke
+    const animeId = 40571 // Majo no Tabitabi  4073
+    
+    //const response = await getAnimeLinks(animeId)
+    //const response = await deleteAnimeLink('6057aee6badad53d55a05717', userId)
+    // const response = await postAnimeLink({
+    //     animeId,
+    //     link: 'http://youtube.com/1',
+    //     numEpisode: 1,
+    //     userId
+    // })
 
+    //console.log(response)
 }
 
-test()
+//test()

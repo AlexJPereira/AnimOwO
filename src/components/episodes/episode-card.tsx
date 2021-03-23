@@ -7,6 +7,8 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
+import { animeDetailsResponse } from '../../services/mal-api/interfaces';
+
 import textStyle from '../../styles/text';
 import colorStyle from '../../styles/color'; 
 
@@ -24,7 +26,7 @@ export default function EpisodeCard(props: EpisodeProps){
         props.setWatchListVisible(props.episodeNumber)
     }
 
-    function showNewEpisodeModal(){
+    async function showNewEpisodeModal(){
         props.setLinkManagerVisible(props.episodeNumber)
     }
 

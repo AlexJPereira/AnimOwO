@@ -1,5 +1,5 @@
 export interface getAnimeResponse{
-    _id: number,
+    _id: string,
     animeId: number,
     userId: number,
     userName: string,
@@ -10,7 +10,7 @@ export interface getAnimeResponse{
     link: string
 }
 export interface postAnimeResponse{
-    _id: number,
+    _id: string,
     code: 0 | 1,
     message: string
 }

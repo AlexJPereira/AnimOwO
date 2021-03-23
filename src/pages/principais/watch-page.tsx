@@ -11,6 +11,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { RouteProp } from '@react-navigation/native';
 import { RootStackPagesProps } from '../rootStackNavigator';
 import * as AnimowoApi from '../../services/animowo-api'
+import { malApi, user } from '../../services/global';
 
 import NavBar from '../../components/navBar'
 import EpisodeCard from '../../components/episodes/episode-card';
@@ -29,6 +30,12 @@ export default function AnimePage(props: AnimePageProps){
     const [isLinkManagerVisible, setLinkManagerVisible] = useState(false);
     const [currentModalEpisode, setCurrentModalEpisode] = useState(1)
     const [currentModalEpisodeList, setCurrentModalEpisodeList] = useState([] as ReactElement[])
+    const [newEpisodeModal, setNewEpisodeModal] = useState({
+        isLoading: true,
+        possuiEpisodio: false,
+        link: '',
+        databaseId: ''
+    })
     
     const episodeList = []
     for(let episode=1; episode<=anime.num_episodes; episode++){
@@ -39,7 +46,15 @@ export default function AnimePage(props: AnimePageProps){
 
     async function showLinkManager(episodeNumber: number){
         setCurrentModalEpisode(episodeNumber)
+        setNewEpisodeModal({isLoading: true, possuiEpisodio: false, link: '', databaseId: ''})
         setLinkManagerVisible(true)
+        const link = await jaPossuiEpisodioCadastrado(episodeNumber)
+        setNewEpisodeModal({
+            isLoading: false, 
+            possuiEpisodio: link ? true: false,
+            link: link ? link.link : '', 
+            databaseId: link ? link._id : ''
+        })
     }
 
     async function showEpisodeList(episodeNumber: number){
@@ -55,15 +70,52 @@ export default function AnimePage(props: AnimePageProps){
             return <LinkCard episode={episode} key={index}/>
         })
     }
+
+    async function jaPossuiEpisodioCadastrado(episodeNumber: number){
+        const links = await AnimowoApi.getAnimeLinks(anime.id, episodeNumber)
+        const user = await malApi.getUserProfileInfo()
+        const episode = links.find(link => link.userId === user?.id)
+        return episode ? episode : undefined
+    }
+
+    async function salvarEpisodio(episodeNumber: number, link: string){
+        if(newEpisodeModal.possuiEpisodio && link !== newEpisodeModal.link){
+            const response = await AnimowoApi.editAnimeLink(newEpisodeModal.databaseId, {
+                link: link,
+                userId: user.id
+            })
+            alert('anime editado com sucesso')
+        }else{
+            const response = await AnimowoApi.postAnimeLink({
+                animeId: anime.id,
+                link: link,
+                numEpisode: episodeNumber,
+                userId: user.id
+            })
+            alert('anime adicionado com sucesso')
+        }
+    }
+
+    async function apagarEpisodio(episodeNumber: number){
+        const response = await AnimowoApi.deleteAnimeLink(newEpisodeModal.databaseId, user.id)
+        alert('anime apagado com sucesso')
+    }
     
     return (
         <View style={PageStyle.mainStyle}>
             <ModalNewEpisode
                 isVisible={isLinkManagerVisible} 
-                setVisible={setLinkManagerVisible} 
+                setVisible={setLinkManagerVisible}
+                isLoading={newEpisodeModal.isLoading}
+                possuiEpisodio={newEpisodeModal.possuiEpisodio}
                 episodeNumber={currentModalEpisode}
-                animeId={anime.id}/>
-            <ModalEpisodeList setVisible={setWatchListVisible} watchVisible={isWatchListVisible}>
+                animeId={anime.id}
+                link={newEpisodeModal.link}
+                apagarEpisodio={apagarEpisodio}
+                salvarEpisodio={salvarEpisodio}/>
+            <ModalEpisodeList
+                setVisible={setWatchListVisible}
+                watchVisible={isWatchListVisible}>
                 { currentModalEpisodeList }
             </ModalEpisodeList>
             <NavBar/>
