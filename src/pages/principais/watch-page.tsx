@@ -11,6 +11,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { RouteProp } from '@react-navigation/native';
 import { RootStackPagesProps } from '../rootStackNavigator';
 import * as AnimowoApi from '../../services/animowo-api'
+import { VoteType } from '../../services/animowo-api/interfaces'
 import { malApi, user } from '../../services/global';
 
 import NavBar from '../../components/navBar'
@@ -65,9 +66,9 @@ export default function AnimePage(props: AnimePageProps){
     }
 
     async function getEpisodeLinks(episodeNumber: number){
-        const episodes = await AnimowoApi.getAnimeLinks(anime.id, episodeNumber)
+        const episodes = await AnimowoApi.getAnimeLinks(anime.id, episodeNumber, user.id)
         return episodes.map((episode, index) => {
-            return <LinkCard episode={episode} key={index}/>
+            return <LinkCard key={index} episode={episode} vote={vote}/>
         })
     }
 
@@ -99,6 +100,10 @@ export default function AnimePage(props: AnimePageProps){
     async function apagarEpisodio(episodeNumber: number){
         const response = await AnimowoApi.deleteAnimeLink(newEpisodeModal.databaseId, user.id)
         alert('anime apagado com sucesso')
+    }
+
+    async function vote(voteType: VoteType, dataBaseId: string){
+        const response = await AnimowoApi.vote(voteType, user.id, dataBaseId)
     }
     
     return (
