@@ -1,18 +1,43 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Modal from 'react-native-modal';
 import { Text, TextInput, View, StyleSheet, TouchableOpacity } from 'react-native'
-import { Ionicons } from '@expo/vector-icons';
 
 import textStyle from '../../styles/text';
 import colorStyle from '../../styles/color'; 
 
 export interface EpisodeListProps{
-    setVisible: React.Dispatch<React.SetStateAction<boolean>>,
     isVisible: boolean,
-    episodeNumber: number
+    setVisible: React.Dispatch<React.SetStateAction<boolean>>,
+    isLoading: boolean,
+    possuiEpisodio: boolean,
+    link: string,
+    episodeNumber: number,
+    animeId: number,
+    apagarEpisodio: (episodeNumber: number) => Promise<void>,
+    salvarEpisodio: (episodeNumber: number, link: string) => Promise<void>
 }
 
 export default function NewEpisode(props: EpisodeListProps){
+
+    const textoEpisodioJaAdicionado = 'Você já possui um link cadastrado para esse episódio.'
+    const textoNovoEpisodio = 'Adicione um link para cadastrar um novo episódio.'
+
+    const [inputText, setInputText] = useState(props.link)
+
+    async function saveButton(){
+        await props.salvarEpisodio(props.episodeNumber, inputText)
+        props.setVisible(false)
+    }
+    
+    async function cancelButton(){
+        props.setVisible(false)
+    }
+
+    async function deleteButton(){
+        await props.apagarEpisodio(props.episodeNumber)
+        props.setVisible(false)
+    }
+
     return(
         <Modal
             onBackdropPress={()=>{props.setVisible(false)}}
@@ -20,32 +45,33 @@ export default function NewEpisode(props: EpisodeListProps){
             onSwipeComplete={()=>{props.setVisible(false)}}
             isVisible={props.isVisible}>
             <View style={ComponentStyle.modalStyle}>
+
                 <Text style={ComponentStyle.textStyle}>Editar Link - Episódio {props.episodeNumber}</Text>
-                <View style={ComponentStyle.editLink}> 
-                    <TextInput style={ComponentStyle.textInputStyle}/>
-                    <TouchableOpacity>
-                        <Ionicons name="pencil" size={24} color="white" />
-                    </TouchableOpacity>
-                    <TouchableOpacity>
-                        <Ionicons name="trash" size={24} color="white" />
-                    </TouchableOpacity>
-                 </View>
-                 <Text style={ComponentStyle.textStyle}>
-                    Você já possui um link cadastrado para esse episódio.
+
+                {props.isLoading ? null : <TextInput style={ComponentStyle.textInputStyle} onChangeText={text => setInputText(text)}>{props.link}</TextInput>}
+
+                <Text style={ComponentStyle.textStyle}>
+                    {props.isLoading ? 'Carregando...' : (props.possuiEpisodio ? textoEpisodioJaAdicionado : textoNovoEpisodio)}
                 </Text>
+
                 <View style={ComponentStyle.modalConfirmation}> 
-                    <TouchableOpacity onPress={async ()=>{
-                        // confirmation function
-                        props.setVisible(false)
-                    }}>
-                        <Text style={ComponentStyle.textStyle}> Cancelar </Text>  
+
+                    {props.possuiEpisodio ? 
+                        <TouchableOpacity onPress={deleteButton}>
+                            <Text style={ComponentStyle.textStyle}>Apagar</Text>  
+                        </TouchableOpacity>
+                        : null}
+
+                    <TouchableOpacity onPress={cancelButton}>
+                        <Text style={ComponentStyle.textStyle}>Cancelar</Text>  
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={async ()=>{
-                        // cancel function
-                        props.setVisible(false)
-                    }}>  
-                        <Text style={ComponentStyle.textStyleHighlight}> Salvar </Text>
-                    </TouchableOpacity>
+
+                    {props.isLoading ? null : 
+                        <TouchableOpacity onPress={saveButton}>  
+                            <Text style={ComponentStyle.textStyleHighlight}>Salvar</Text>
+                        </TouchableOpacity>
+                    }
+
                 </View>
             </View> 
         </Modal>
@@ -94,13 +120,12 @@ const ComponentStyle = StyleSheet.create({
     }, 
     modalConfirmation:{
         flexDirection: 'row', 
-        justifyContent: 'flex-end', 
+        justifyContent: 'space-around', 
         paddingEnd: 10
     }, 
     textInputStyle:{
         backgroundColor: "#ffffff", 
         color: 'black', 
-        width: '85%'
     }, 
     elementStyle:{
         paddingVertical: 10

@@ -9,6 +9,11 @@ export interface EpisodeListProps{
 }
 
 export default function EpisodeList(props: EpisodeListProps){
+
+    async function cancelFunction(){
+        props.setVisible(false)
+    }
+
     return(
         <Modal
                 backdropOpacity={0.75}
@@ -21,10 +26,7 @@ export default function EpisodeList(props: EpisodeListProps){
                 <View style={ComponentStyle.linkClose}>
                     <Button 
                         title="CANCELAR"
-                        onPress={async ()=>{
-                            // cancel function
-                            props.setVisible(false)
-                        }}/>
+                        onPress={cancelFunction}/>
                 </View>
             </Modal>
     )
