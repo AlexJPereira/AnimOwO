@@ -98,7 +98,7 @@ export default function Home(){
 
                 <LinkSetinha text="Recomendados"/>
                 <AnimeHorizontalList>
-                    { state.recomendados.map((element, index) => (<AnimeCard key={index} id={element.id} image={element.image} name={element.name}/>)) }
+                    { /*state.recomendados.map((element, index) => (<AnimeCard key={index} id={element.id} image={element.image} name={element.name}/>))*/ }
                 </AnimeHorizontalList>
 
                 <LinkSetinha text="Em Alta"/>

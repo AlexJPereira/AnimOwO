@@ -26,6 +26,6 @@ export default function App() {
     }, [])
 
     return (
-        state.logando ? <View></View> : <StackNavigator initialRouteName={state.logado ? "home" : "login"}/>
+        state.logando ? null : <StackNavigator initialRouteName={state.logado ? "home" : "login"}/>
     )
 }

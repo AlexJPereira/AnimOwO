@@ -22,6 +22,27 @@ export async function isLoggedIn(this: MalApi){
     if(this.codeChallenge && this.codeVerifier && this.authCode && this.acessToken && this.refreshToken){
         return await this.checkConnection()
     } else {
+        const codeChallenge = await Store.getValue('codeChallenge')
+        this.codeChallenge = codeChallenge ? codeChallenge : ''
+
+        const codeVerifier = await Store.getValue('codeVerifier')
+        this.codeVerifier = codeVerifier ? codeVerifier : ''
+
+        const authCode = await Store.getValue('authCode')
+        this.authCode = authCode ? authCode : ''
+
+        const acessToken = await Store.getValue('acessToken')
+        this.acessToken = acessToken ? acessToken : ''
+        if(acessToken)
+            api.defaults.headers["Authorization"] = `Bearer ${acessToken}`
+
+        const refreshToken = await Store.getValue('refreshToken')
+        this.refreshToken = refreshToken ? refreshToken : ''
+    }
+
+    if(this.codeChallenge && this.codeVerifier && this.authCode && this.acessToken && this.refreshToken){
+        return await this.checkConnection()
+    } else {
         return false
     }
 }
@@ -144,7 +165,9 @@ export async function getNewAcessToken(this: MalApi){
 /** Faz uma requisição para a API do MAL para descobrir se os tokens estão corretos */
 export async function checkConnection(this: MalApi): Promise<boolean>{
     try{
-        await api.get('/users/@me')
+        const user = await this.getUserProfileInfo()
+        if(user)
+            setCachedUser(user)
         return true
     }catch(error){
         printError("checkConnection()", error)

@@ -3,11 +3,11 @@ import { View, Text, StyleSheet, Image } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
 import { malApi } from '../../services/global'
-import * as AnimowoApi from '../../services/animowo-api'
 
 import textStyle from '../../styles/text'
 import Button from '../../components/button'
 import Link from '../../components/link'
+import { isLoggedIn } from '../../services/mal-api/login'
 
 const LogoCompleto = require('../../app-assets/logo/Logo-OWO-MAL.png')
 
@@ -24,23 +24,11 @@ export default function Login(){
     }
 
     async function testLogin(){
-        await malApi.login()
-        const user = await malApi.getUserProfileInfo()
-
-        let resp
-        console.log(user?.id)
-        if(user) resp = await AnimowoApi.postAnimeLink({
-            animeId: 40571,
-            numEpisode: 1,
-            link: 'https://www.test.com/',
-            userId: user.id
-        })
-        console.log("ok")
-        console.log(resp)
+        
     }
 
     async function login(){
-        if(!(await malApi.isLoggedIn())){
+        if(!(await malApi.isLoggedIn() && !state.isLogging)){
             setState({ isLogging: true })
             try{
                 await malApi.login()
@@ -50,6 +38,8 @@ export default function Login(){
                 setState({ isLogging: false })
                 console.log(error)
             }
+        }else{
+            navigateToHome()
         }
     }
 
