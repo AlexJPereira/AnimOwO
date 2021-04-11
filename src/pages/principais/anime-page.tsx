@@ -12,9 +12,10 @@ import { RootStackPagesProps } from '../rootStackNavigator';
 import { RootStackNavigator } from '../rootStackNavigator';
 import Button from '../../components/button';
 import NavBar from '../../components/navBar';
+import Selector from '../../components/selector'
 
 import { malApi } from '../../services/global'
-import { animeDetailsInitialValues, animeDetailsResponse } from "../../services/mal-api/interfaces";
+import { animeDetailsInitialValues, animeDetailsResponse, listStatus } from "../../services/mal-api/interfaces";
 
 
 const windowWidth = Dimensions.get('window').width;
@@ -40,12 +41,24 @@ export default function AnimePage(props: AnimePageProps){
         synopsis: "Anime Description"
     }
     const [state, setState] = useState(initialValues)
+    const [selectedList, setSelectedList] = useState("" as (listStatus | ""))
     
     async function getAnimeDetails(){
         const anime = await malApi.getAnimeDetails(params.id)
         if(anime){
             setState(anime)
+            setSelectedList(anime.my_list_status?.status || "")
         }
+    }
+
+    async function setAnimeList(value: listStatus | ""){
+        const newValue = value ? value as listStatus : undefined
+
+        setSelectedList(value)
+        const response = await malApi.updateAnimeInfo(params.id, {
+            status: newValue
+        })
+        console.log(response ? `alterando com sucesso para ${response.status}` : "erro, nao foi alterado")
     }
 
     useEffect(()=>{
@@ -71,6 +84,16 @@ export default function AnimePage(props: AnimePageProps){
                 </View>
                 <Text style={PageStyle.noteStyle}>{state.mean}</Text>
             </View>
+
+            <Selector options={[
+                {text: "Sem Lista", value: ""},
+                {text: "Completado", value: "completed"},
+                {text: "Assistindo", value: "watching"},
+                {text: "Desistido", value: "dropped"},
+                {text: "Esperando", value: "on_hold"},
+                {text: "Plano de assistir", value: "plan_to_watch"}
+            ]} stateVariable={selectedList} setStateVariable={setAnimeList}/>
+
             <View>
                 <Text style={PageStyle.sinopsysTitle}>Sinópse:</Text>
             </View>
@@ -79,6 +102,7 @@ export default function AnimePage(props: AnimePageProps){
                     <Text>{state.synopsis}</Text>
                 </View>
             </ScrollView>
+
         </View>
     )
 }
