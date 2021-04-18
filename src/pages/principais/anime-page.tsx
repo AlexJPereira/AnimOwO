@@ -26,6 +26,7 @@ const screenHeight = Dimensions.get('screen').height;
 export type AnimePageProps = {
     route: RouteProp<RootStackPagesProps, 'anime-page'>
 }
+type possibleScores = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10
 
 
 export default function AnimePage(props: AnimePageProps){
@@ -42,12 +43,15 @@ export default function AnimePage(props: AnimePageProps){
     }
     const [state, setState] = useState(initialValues)
     const [selectedList, setSelectedList] = useState("" as (listStatus | ""))
+    const [userScore, setUserScore] = useState(0 as possibleScores)
     
     async function getAnimeDetails(){
         const anime = await malApi.getAnimeDetails(params.id)
         if(anime){
             setState(anime)
             setSelectedList(anime.my_list_status?.status || "")
+            const score = anime.my_list_status?.score as possibleScores
+            setUserScore(score ? score : 0)
         }
     }
 
@@ -58,7 +62,25 @@ export default function AnimePage(props: AnimePageProps){
         const response = await malApi.updateAnimeInfo(params.id, {
             status: newValue
         })
-        console.log(response ? `alterando com sucesso para ${response.status}` : "erro, nao foi alterado")
+        console.log(response ? `alterando lista para ${response.status}` : "erro, nao foi alterado")
+    }
+
+    async function setAnimeUserScore(value: possibleScores){
+        setUserScore(value)
+        const response = await malApi.updateAnimeInfo(params.id, {
+            score: value ? value : undefined
+        })
+        console.log(response ? `alterado nota para ${value}` : `erro, nao foi alterado`)
+    }
+
+    function getScoreObject(){
+        const scores = [0,1,2,3,4,5,6,7,8,9,10] as possibleScores[] 
+        return scores.map((score) => {
+            return {
+                text: score !== 0 ?  score + " ⭐" : "Sem Nota",
+                value: score
+            }
+        })
     }
 
     useEffect(()=>{
@@ -85,14 +107,21 @@ export default function AnimePage(props: AnimePageProps){
                 <Text style={PageStyle.noteStyle}>{state.mean}</Text>
             </View>
 
-            <Selector options={[
-                {text: "Sem Lista", value: ""},
-                {text: "Completado", value: "completed"},
-                {text: "Assistindo", value: "watching"},
-                {text: "Desistido", value: "dropped"},
-                {text: "Esperando", value: "on_hold"},
-                {text: "Plano de assistir", value: "plan_to_watch"}
-            ]} stateVariable={selectedList} setStateVariable={setAnimeList}/>
+            <View style={PageStyle.editAnimeContainer}>
+                <View style={PageStyle.editAnimeSelectorContainer}>
+                    <Selector options={[
+                        {text: "Sem Lista", value: ""},
+                        {text: "Completado", value: "completed"},
+                        {text: "Assistindo", value: "watching"},
+                        {text: "Desistido", value: "dropped"},
+                        {text: "Esperando", value: "on_hold"},
+                        {text: "Plano de assistir", value: "plan_to_watch"}
+                    ]} stateVariable={selectedList} setStateVariable={setAnimeList}/>
+                    {selectedList !== "" ? 
+                    <Selector options={getScoreObject()} stateVariable={userScore} setStateVariable={setAnimeUserScore}/>
+                    : null}
+                </View>
+            </View>
 
             <View>
                 <Text style={PageStyle.sinopsysTitle}>Sinópse:</Text>
@@ -190,5 +219,15 @@ const PageStyle = StyleSheet.create({
         justifyContent: 'space-around',
         paddingTop: 20, 
         paddingBottom: 20
+    },
+    editAnimeContainer: {
+        paddingVertical: 20,
+        paddingHorizontal: 5
+    },
+    editAnimeSelectorContainer: {
+        flexDirection: 'row',
+        flexShrink: 10
+        
+        
     }
 })

@@ -6,13 +6,13 @@ import colorStyle from '../styles/color';
 import { listStatus } from '../services/mal-api/interfaces'
 
 interface SelectorProps {
-    options: {text: string, value: listStatus | ""}[],
+    options: {text: string, value: any}[],
     setStateVariable: (value: any) => void,
-    stateVariable: string
+    stateVariable: any
     defaultValue?: number
 }
 
-export default function Selector<T>(props: SelectorProps){
+export default function Selector(props: SelectorProps){
     const itens = props.options.map((item, index) => 
         <Picker.Item key={ index } value={ item.value } label={ item.text }/>
     )
@@ -39,7 +39,9 @@ const selectorStyle = StyleSheet.create({
         borderColor: colorStyle.corPrincipal.color,
         borderStyle: 'solid',
         borderWidth: 3,
-        borderRadius: 15
+        borderRadius: 15,
+        flex: 1,
+        marginHorizontal: 5
     },
     picker: {
         color: 'white'
