@@ -4,8 +4,6 @@ import { View } from 'react-native'
 import ListaPadrao from '../../components/lista-padrao'
 import NavBar from '../../components/navBar'
 import AnimeCardDetails from '../../components/anime-card-details'
-import { malApi } from '../../services/global'
-
 
 export default function Favorito(){
 
@@ -19,16 +17,7 @@ export default function Favorito(){
     })
 
     async function getUserList(){
-        const response = await malApi.getUserList('on_hold', 'anime_title')
-        if(response)
-            setState({
-                assitindo: response.data.map((element) => ({
-                    id: element.node.id,
-                    animeTitle: element.node.title,
-                    animePic: element.node.main_picture.medium,
-                    episodesNumber: element.node.num_episodes,
-                }))
-            })
+        
     }
 
     useEffect(()=>{

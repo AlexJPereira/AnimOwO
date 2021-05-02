@@ -19,7 +19,7 @@ export default function PlanoAssistir(){
     })
 
     async function getUserList(){
-        const response = await malApi.getUserList('plan_to_watch', 'anime_title')
+        const response = await malApi.getUserList('anime_title', 'plan_to_watch')
         if(response)
             setState({
                 assitindo: response.data.map((element) => ({

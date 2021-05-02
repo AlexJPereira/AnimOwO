@@ -30,6 +30,7 @@ const listaPadrao = StyleSheet.create({
         marginBottom: 30,
     },
     lista: {
-        paddingBottom: 40
+        paddingBottom: 40,
+        //flex: 1
     },
 })

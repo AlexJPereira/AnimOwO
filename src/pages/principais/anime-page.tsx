@@ -31,6 +31,7 @@ type possibleScores = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10
 
 export default function AnimePage(props: AnimePageProps){
 
+    const starEmoji = "⭐"
     const params = props.route.params
     const initialValues: animeDetailsResponse = {
         ...animeDetailsInitialValues,
@@ -74,13 +75,27 @@ export default function AnimePage(props: AnimePageProps){
     }
 
     function getScoreObject(){
-        const scores = [0,1,2,3,4,5,6,7,8,9,10] as possibleScores[] 
+        const scores = [0,1,2,3,4,5,6,7,8,9,10] as possibleScores[]
         return scores.map((score) => {
             return {
-                text: score !== 0 ?  score + " ⭐" : "Sem Nota",
+                text: score !== 0 ?  (score + " " + starEmoji) : "Sem Nota",
                 value: score
             }
         })
+    }
+
+    function convertSeason(season: string){
+        const ptbrSeason: {[seasonName: string]: string} = {}
+        ptbrSeason["summer"] = "Verão"
+        ptbrSeason["fall"] = "Outono"
+        ptbrSeason["winter"] = "Inverno"
+        ptbrSeason["spring"] = "Primavera"
+
+        return ptbrSeason[season]
+    }
+
+    function numberWithCommas(x: number) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     }
 
     useEffect(()=>{
@@ -89,49 +104,53 @@ export default function AnimePage(props: AnimePageProps){
 
     return (
         <View style={PageStyle.mainStyle}>
-            <NavBar></NavBar>
-            <View style={PageStyle.cardStyle}>
-                <Image source={{uri: state.main_picture.medium}} style={PageStyle.imageStyle}></Image>
-                <View style={PageStyle.viewStyle}>
-                    <View style={PageStyle.nameField}>
-                        <Text style={PageStyle.titleStyle} ellipsizeMode='tail' numberOfLines={2}>{state.title}</Text>
-                    </View>
-                    <Text style={PageStyle.episodesStyle}>{state.num_episodes} Episódios</Text>
-                    <View style={PageStyle.buttonField}>
-                        <Button 
-                            title={"ASSISTIR"} 
-                            onPress={()=>{RootStackNavigator.navigate('watch-page', { anime: state })}}/>
-                        <Button title={"DOWNLOAD"} onPress={()=>{}}/>
-                    </View>
-                </View>
-                <Text style={PageStyle.noteStyle}>{state.mean}</Text>
-            </View>
-
-            <View style={PageStyle.editAnimeContainer}>
-                <View style={PageStyle.editAnimeSelectorContainer}>
-                    <Selector options={[
-                        {text: "Sem Lista", value: ""},
-                        {text: "Completado", value: "completed"},
-                        {text: "Assistindo", value: "watching"},
-                        {text: "Desistido", value: "dropped"},
-                        {text: "Esperando", value: "on_hold"},
-                        {text: "Plano de assistir", value: "plan_to_watch"}
-                    ]} stateVariable={selectedList} setStateVariable={setAnimeList}/>
-                    {selectedList !== "" ? 
-                    <Selector options={getScoreObject()} stateVariable={userScore} setStateVariable={setAnimeUserScore}/>
-                    : null}
-                </View>
-            </View>
-
-            <View>
-                <Text style={PageStyle.sinopsysTitle}>Sinópse:</Text>
-            </View>
+            <NavBar/>
             <ScrollView contentContainerStyle={PageStyle.sinopsysView}>
+                <View style={PageStyle.cardStyle}>
+                    <Image source={{uri: state.main_picture.medium}} style={PageStyle.imageStyle}></Image>
+                    <View style={PageStyle.viewStyle}>
+                        <View style={PageStyle.nameField}>
+                            <Text style={PageStyle.titleStyle} ellipsizeMode='tail' numberOfLines={2}>{state.title}</Text>
+                        </View>
+                        <Text style={PageStyle.noteStyle}>{state.mean} {starEmoji}</Text>
+                        <Text style={PageStyle.episodesStyle}>{state.num_episodes} Episódios</Text>
+                        <View style={PageStyle.buttonField}>
+                            <Button 
+                                title={"ASSISTIR"} 
+                                onPress={()=>{RootStackNavigator.navigate('watch-page', { anime: state })}}/>
+                        </View>
+                        <Text style={PageStyle.titleStyle}>{numberWithCommas(state.num_list_users)} usuários</Text>
+                        <Text style={PageStyle.titleStyle}>Rank {state.rank}</Text>
+                        <Text style={PageStyle.titleStyle}>{convertSeason(state.start_season.season)} de {state.start_season.year}</Text>
+                    </View>
+                    
+                </View>
+
+                <View style={PageStyle.editAnimeContainer}>
+                    <View style={PageStyle.editAnimeSelectorContainer}>
+                        <Selector options={[
+                            {text: "Sem Lista", value: ""},
+                            {text: "Completado", value: "completed"},
+                            {text: "Assistindo", value: "watching"},
+                            {text: "Desistido", value: "dropped"},
+                            {text: "Esperando", value: "on_hold"},
+                            {text: "Plano de assistir", value: "plan_to_watch"}
+                        ]} stateVariable={selectedList} setStateVariable={setAnimeList}/>
+                        {selectedList !== "" ? 
+                        <Selector options={getScoreObject()} stateVariable={userScore} setStateVariable={setAnimeUserScore}/>
+                        : null}
+                    </View>
+                </View>
+
+                <View>
+                    <Text style={PageStyle.sinopsysTitle}>Sinópse:</Text>
+                </View>
+                    
+                
                 <View style={PageStyle.sinopsysCard}>
-                    <Text>{state.synopsis}</Text>
+                        <Text>{state.synopsis}</Text>
                 </View>
             </ScrollView>
-
         </View>
     )
 }
@@ -139,13 +158,12 @@ export default function AnimePage(props: AnimePageProps){
 const PageStyle = StyleSheet.create({
     mainStyle: {
         paddingBottom: screenHeight-windowHeight+30,
-        maxHeight: screenHeight
     },
     viewStyle:{
-        maxWidth: windowWidth/2
+        maxWidth: windowWidth/2-10,
+        paddingLeft: 10
     },
     cardStyle:{
-        justifyContent: 'space-around',
         flexDirection: 'row'
     },
     imageStyle:{
@@ -159,7 +177,7 @@ const PageStyle = StyleSheet.create({
     buttonField:{
         flex: 1,
         paddingTop: 10,
-        justifyContent:'space-around'
+        justifyContent:'flex-start'
     },
     titleStyle:{
         textAlign: 'left',
@@ -170,11 +188,10 @@ const PageStyle = StyleSheet.create({
         fontSize: 15,
         lineHeight: 23,
         letterSpacing: 1,
-        color: '#FFFFFF'
+        color: '#FFFFFF',
     },
     noteStyle:{
-        textAlign: 'right',
-        textAlignVertical: 'top',
+        textAlignVertical: 'bottom',
         fontFamily: 'Roboto',
         fontStyle: 'normal',
         fontWeight: 'normal',
@@ -207,7 +224,7 @@ const PageStyle = StyleSheet.create({
     }, 
     sinopsysView:{
         paddingVertical: 20,
-        paddingHorizontal: 20,
+        paddingHorizontal: 10,
     },
     sinopsysCard:{
         backgroundColor: '#C4C4C4',
@@ -222,12 +239,8 @@ const PageStyle = StyleSheet.create({
     },
     editAnimeContainer: {
         paddingVertical: 20,
-        paddingHorizontal: 5
     },
     editAnimeSelectorContainer: {
         flexDirection: 'row',
-        flexShrink: 10
-        
-        
     }
 })

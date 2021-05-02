@@ -107,7 +107,7 @@ export async function getSuggestedAnime(this: MalApi, limit?: number, offset?: n
 }
 
 /**
- * Retorna a lista de lançamentos
+ * Retorna a lista de lançamentos, WIP
  */
 export async function getRelease(this: MalApi){
     const mainPage = await axios.get('https://myanimelist.net/')

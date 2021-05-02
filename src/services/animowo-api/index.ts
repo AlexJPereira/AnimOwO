@@ -1,7 +1,7 @@
 import api from './axios'
 import {
     postAnimeParams, editAnimeParams, VoteType,
-    getAnimeResponse, postAnimeResponse, editAnimeResponse, deleteAnimeResponse, voteAnimeResponse
+    getAnimeResponse, postAnimeResponse, editAnimeResponse, deleteAnimeResponse, voteAnimeResponse, recommendationResponse
 } from './interfaces'
 import * as Store from '../store'
 
@@ -74,25 +74,23 @@ export async function vote(type: VoteType, userId: number, linkId: string){
     return response.data as voteAnimeResponse
 }
 
+export async function getRecommendations(userId: number){
+    const header = await getHeaderToken()
+    if(!header)
+        return
+    
+    const response = await api.get(`/recommendation/${userId}`, header)
+    return response.data as recommendationResponse
+}
+
+
+
 async function test(){
     const userId = 4811263 // Wykke
     const animeId = 40571 // Majo no Tabitabi  4073
     
-    //const response = await getAnimeLinks(animeId, 1, userId)
-    // const response = await editAnimeLink('6057bb3b66825f4034042b65', {
-    //     link: 'test2',
-    //     userId: userId
-    // })
-    // const response = await deleteAnimeLink('6057aee6badad53d55a05717', userId)
-    // const response = await postAnimeLink({
-    //     animeId,
-    //     link: 'http://youtube.com/1',
-    //     numEpisode: 1,
-    //     userId
-    // })
-    //const response = await vote('down', userId, '6057bb3b66825f4034042b65')
-
-    //console.log(response)
+    const resp = await getRecommendations(userId)
+    console.log(resp)
 }
 
 //test()

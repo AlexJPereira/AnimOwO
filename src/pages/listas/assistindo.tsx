@@ -19,7 +19,7 @@ export default function Assistindo(){
     })
 
     async function getUserList(){
-        const response = await malApi.getUserList('watching', 'anime_title')
+        const response = await malApi.getUserList('anime_title', 'watching')
         if(response)
             setState({
                 assitindo: response.data.map((element) => ({
