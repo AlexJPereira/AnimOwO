@@ -53,7 +53,7 @@ export default function ListaCompleta(){
     }, [])
 
     return (
-        <View>
+        <View style={style.page}>
             <NavBar/>
 
             <View style={style.selectorContainer}>
@@ -63,20 +63,28 @@ export default function ListaCompleta(){
                     stateVariable={selectorState}/>
             </View>
 
-            <ListaPadrao name={getSelectorText(selectorState)}>
-                {
-                    currentList
-                }
-            </ListaPadrao>
+            <View style={style.listContainer}>
+                <ListaPadrao name={getSelectorText(selectorState)}>
+                    {
+                        currentList
+                    }
+                </ListaPadrao>
+            </View>
         </View>
     )
 }
 
 const style = StyleSheet.create({
+    page:{
+        height: '100%'
+    },
     selectorContainer: {
         marginTop: 30,
         flexDirection: 'row',
-        paddingHorizontal: '5%'
+        paddingHorizontal: '5%',
+    },
+    listContainer:{
+        flex: 1,
     }
 })
 

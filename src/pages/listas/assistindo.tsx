@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 
 import ListaPadrao from '../../components/lista-padrao'
 import NavBar from '../../components/navBar'
@@ -37,22 +37,33 @@ export default function Assistindo(){
     }, [])
     
     return (
-        <View>
+        <View style={style.page}>
             <NavBar/>
-            <ListaPadrao name="Assistindo">
-                {
-                    state.assitindo.map((element, index) => 
-                        <AnimeCardDetails key={index}
-                            id = {element.id}
-                            animeName={element.animeTitle} 
-                            animeImage={{ uri: element.animePic }} 
-                            details={`Episódio ${element.episodesWatched} de ${element.episodesNumber}`}/>
-                    )
-                }
-            </ListaPadrao>
+            <View style={style.listContainer}>
+                <ListaPadrao name="Assistindo">
+                    {
+                        state.assitindo.map((element, index) => 
+                            <AnimeCardDetails key={index}
+                                id = {element.id}
+                                animeName={element.animeTitle} 
+                                animeImage={{ uri: element.animePic }} 
+                                details={`Episódio ${element.episodesWatched} de ${element.episodesNumber}`}/>
+                        )
+                    }
+                </ListaPadrao>
+            </View>
         </View>
     )
 }
 
+
+const style = StyleSheet.create({
+    page: {
+        height: '100%'
+    },
+    listContainer: {
+        flex: 1
+    }
+})
 
 

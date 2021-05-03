@@ -43,7 +43,12 @@ export default function Home(){
     
     async function getLists(){
         const watchingResponse = await malApi.getUserList('anime_title', 'watching')
-        const recomendadosResponse = await getRecommendations(user.id)
+
+        let recomendadosResponse
+        try{
+            recomendadosResponse = await getRecommendations(user.id)
+        }catch(error){}
+
         const emAltaResponse = await malApi.getAnimeRankingList('airing', 20)
         const date = getSeason()
         const temporadasResponse = await malApi.getSeasonalAnime(date.year, date.season, 'anime_num_list_users', 20)

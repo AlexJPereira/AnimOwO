@@ -28,6 +28,7 @@ export type AnimePageProps = {
 }
 type possibleScores = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10
 
+const defaultImage = 'https://idealservis.com.br/portal/wp-content/uploads/2014/07/default-placeholder.png'; 
 
 export default function AnimePage(props: AnimePageProps){
 
@@ -37,8 +38,8 @@ export default function AnimePage(props: AnimePageProps){
         ...animeDetailsInitialValues,
         title: "Anime",
         main_picture: {
-            medium: "https://idealservis.com.br/portal/wp-content/uploads/2014/07/default-placeholder.png",
-            large: "https://idealservis.com.br/portal/wp-content/uploads/2014/07/default-placeholder.png"
+            medium: defaultImage,
+            large: defaultImage
         }, 
         synopsis: "Anime Description"
     }
@@ -48,6 +49,13 @@ export default function AnimePage(props: AnimePageProps){
     
     async function getAnimeDetails(){
         const anime = await malApi.getAnimeDetails(params.id)
+        
+        if(anime && anime?.main_picture === undefined)
+            anime.main_picture = {
+                medium: defaultImage,
+                large: defaultImage
+            }
+        
         if(anime){
             setState(anime)
             setSelectedList(anime.my_list_status?.status || "")

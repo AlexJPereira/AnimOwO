@@ -12,9 +12,11 @@ export default function ListaPadrao(props: ListaPadraoProps){
     return(
         <View style={listaPadrao.container}>
             <Text style={listaPadrao.texto}>{props.name}</Text>
-            <ScrollView contentContainerStyle={listaPadrao.lista}>
-                {props.children}
-            </ScrollView>
+            <View style={listaPadrao.scrollContainer}>
+                <ScrollView contentContainerStyle={listaPadrao.lista}>
+                    {props.children}
+                </ScrollView>
+            </View>
         </View>
     )
 }
@@ -22,7 +24,9 @@ export default function ListaPadrao(props: ListaPadraoProps){
 const listaPadrao = StyleSheet.create({
     container: {
         height: '100%',
-        paddingBottom: 100,
+    },
+    scrollContainer: {
+        flex: 1
     },
     texto: {
         ...textStyle.tituloPagina,
@@ -31,6 +35,5 @@ const listaPadrao = StyleSheet.create({
     },
     lista: {
         paddingBottom: 40,
-        //flex: 1
     },
 })

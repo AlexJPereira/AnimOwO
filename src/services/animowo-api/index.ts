@@ -83,6 +83,9 @@ export async function getRecommendations(userId: number){
     return response.data as recommendationResponse
 }
 
+export async function getFavorites(userId: number){
+    return []
+}
 
 
 async function test(){

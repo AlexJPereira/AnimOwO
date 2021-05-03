@@ -10,6 +10,7 @@ import { malApi } from '../../services/global';
 import AnimeCard, { AnimeCardProps } from '../../components/anime-card'
 
 import colorStyle from '../../styles/color'; 
+const defaultImage = 'https://idealservis.com.br/portal/wp-content/uploads/2014/07/default-placeholder.png'; 
 
 export default function Search(){
 
@@ -26,11 +27,10 @@ export default function Search(){
             setResponse({
                 resultado: searchResponse ? searchResponse.data.map((element) => ({
                     id: element.node.id,
-                    image: { uri: element.node.main_picture.medium },
+                    image: { uri: element.node.main_picture != undefined ? element.node.main_picture.medium : defaultImage},
                     name: element.node.title
                 })) : [] as AnimeCardProps[]
-            }
-            )
+            })
         }else{
             setResponse({
                 resultado: [] as AnimeCardProps[]
