@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StackNavigator } from './src/pages/rotas'
+import { StackNavigator, DrawerNavigator } from './src/pages/rotas'
 import { View } from 'react-native'
 
 import MalApi from './src/services/mal-api'
@@ -26,6 +26,6 @@ export default function App() {
     }, [])
 
     return (
-        state.logando ? null : <StackNavigator initialRouteName={state.logado ? "home" : "login"}/>
+        state.logando ? null : <DrawerNavigator initialRouteName={state.logado ? "home" : "login"}/>
     )
 }

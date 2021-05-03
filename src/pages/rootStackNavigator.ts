@@ -12,10 +12,10 @@ export type RootStackPagesProps = {
     'sobre': any, 
     'configuracoes': any, 
     'pesquisa': any
+    'login': any
 }
 
-//export var RootStackNavigator: StackNavigationProp<RootStackPagesProps, 'home'>
-export var RootStackNavigator: any
+export var RootStackNavigator: StackNavigationProp<RootStackPagesProps, 'home'>
 
 export function setRootStackNavigator(newRootStack: StackNavigationProp<RootStackPagesProps, 'home'>){
     RootStackNavigator = newRootStack

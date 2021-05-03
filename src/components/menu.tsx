@@ -17,7 +17,6 @@ import Sobre from '../pages/mais/sobre';
 const Drawer = createDrawerNavigator();
 
 export default function MyDrawer() {
-    const dimensions = useWindowDimensions();
     return (
             <Drawer.Navigator
                 drawerType={'front'}

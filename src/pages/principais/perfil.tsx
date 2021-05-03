@@ -4,7 +4,6 @@ import {
     ScrollView, 
     Text, 
     StyleSheet} from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 
 import NavBar from '../../components/navBar';
 import AnimeHorizontalListTest from '../../components/anime-horizontal-list-test';
@@ -13,11 +12,10 @@ import pagesNames from '../pagesNames';
 import ProfileCard from '../../components/profile-card';
 import { malApi } from '../../services/global';
 import { user } from '../../services/global'
-
+import { RootStackNavigator } from '../../pages/rootStackNavigator'
 
 export default function Perfil(){
 
-    const navigation = useNavigation()
     const [state, setState] = useState({
         username: "Anonimo",
         profilePic: "https://i1.wp.com/www.camaragibe.pe.gov.br/wp-content/uploads/2019/04/default-user-male.png?fit=640%2C605&ssl=1",
@@ -28,7 +26,7 @@ export default function Perfil(){
     
     async function logoff(){
         await malApi.logoff()
-        navigation.navigate(pagesNames.login)
+        RootStackNavigator.navigate('login')
     }
 
     async function getUser(){

@@ -1,4 +1,5 @@
 import React from 'react'
+import {Text} from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'; 
 import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack'
@@ -30,10 +31,6 @@ import Assistindo from './listas/assistindo'
 import Favoritos from './listas/favoritos'
 import PlanoAssistir from './listas/plano-assistir'
 
-// componentes
-import Menu from './principais/menu'
-import NavBar from '../components/navBar'
-
 const AppStack = createStackNavigator()
 const Tab = createBottomTabNavigator()
 
@@ -55,37 +52,30 @@ const MyTheme = {
 };
 
 export interface TabkNavigatorProps{
-    //navigation: StackNavigationProp<RootStackPagesProps, 'home'>
-    navigation: any
+    navigation: StackNavigationProp<RootStackPagesProps, 'home'>
 }
 
-export function DrawerNavigator() {
+export function DrawerNavigator(props: StackNavigatorProps) {
     const Drawer = createDrawerNavigator();
 
     return (
-        <Drawer.Navigator
+        <NavigationContainer theme={MyTheme}>
+            <Drawer.Navigator
                 drawerType={'front'}
                 backBehavior={'none'}
-            >
+                drawerContent={()=><Text>test</Text>}
+                drawerPosition={'right'}>
+
                 <Drawer.Screen 
                     name="Home" 
-                    component={TabNavigator}
                     options={{
                         drawerIcon: config => <FontAwesome5 name="download" size={20} color="white" focused={true} />
-                    }}/>
-                <Drawer.Screen 
-                    name="Sobre" 
-                    component={Sobre}
-                    options={{
-                        drawerIcon: config => <FontAwesome5 name="info-circle" size={20} color="white" focused={true} />
-                    }}/>
-                <Drawer.Screen 
-                    name="Configurações"
-                    component={Configuracoes}
-                    options={{
-                        drawerIcon: config =><Ionicons name="settings" size={20} color="white"/>
-                    }}/>
+                    }}>
+                    {()=><StackNavigator initialRouteName={props.initialRouteName}/>}
+                </Drawer.Screen>
+                
             </Drawer.Navigator>
+        </NavigationContainer>
   )
 }
 
@@ -165,13 +155,11 @@ export interface StackNavigatorProps{
 
 export function StackNavigator(props: StackNavigatorProps){
     return (
-        <NavigationContainer theme={MyTheme}>
-            <AppStack.Navigator screenOptions={{ 
-                headerShown: true,  
-                headerLeft: () => (<NavBar/>)}} 
+        <NavigationContainer theme={MyTheme} independent={true}>
+            <AppStack.Navigator screenOptions={{ headerShown: false }} 
                 initialRouteName={props.initialRouteName}>
                 <AppStack.Screen name={pagesNames.login} component={Login}/>
-                <AppStack.Screen name={pagesNames.home} component={DrawerNavigator}/>
+                <AppStack.Screen name={pagesNames.home} component={TabNavigator}/>
                 <AppStack.Screen name={pagesNames.perfil} component={Perfil}/>
                 <AppStack.Screen name={pagesNames.pesquisa} component={Pesquisa}/>
                 <AppStack.Screen name={pagesNames.animePage} component={AnimePage}/>

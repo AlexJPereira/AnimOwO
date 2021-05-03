@@ -20,7 +20,7 @@ export default function NavBar(){
                 <Ionicons name="search" size={24} color="white"/>
             </TouchableOpacity>
             <Image style={navBarStyle.logo} source={LogoCompleto}></Image>
-            <TouchableOpacity onPress={()=>{ RootStackNavigator.openDrawer() }}>
+            <TouchableOpacity onPress={()=>{  }}>
                 <Ionicons name="md-menu" size={24} color={'white'} />
             </TouchableOpacity>
         </View>
