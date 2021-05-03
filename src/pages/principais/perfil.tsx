@@ -12,6 +12,7 @@ import Button from '../../components/button';
 import pagesNames from '../pagesNames';
 import ProfileCard from '../../components/profile-card';
 import { malApi } from '../../services/global';
+import { user } from '../../services/global'
 
 
 export default function Perfil(){
@@ -31,7 +32,6 @@ export default function Perfil(){
     }
 
     async function getUser(){
-        const user = await malApi.getUserProfileInfo()
         try{
             if(user){
                 setState({...state,

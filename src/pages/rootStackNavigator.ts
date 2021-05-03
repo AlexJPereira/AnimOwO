@@ -14,7 +14,8 @@ export type RootStackPagesProps = {
     'pesquisa': any
 }
 
-export var RootStackNavigator: StackNavigationProp<RootStackPagesProps, 'home'>
+//export var RootStackNavigator: StackNavigationProp<RootStackPagesProps, 'home'>
+export var RootStackNavigator: any
 
 export function setRootStackNavigator(newRootStack: StackNavigationProp<RootStackPagesProps, 'home'>){
     RootStackNavigator = newRootStack

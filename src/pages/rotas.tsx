@@ -7,6 +7,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 
 import { RootStackPagesProps, setRootStackNavigator } from './rootStackNavigator'
+import { createDrawerNavigator, DrawerItem } from '@react-navigation/drawer';
 
 // estilos
 import pagesNames from './pagesNames'
@@ -31,6 +32,7 @@ import PlanoAssistir from './listas/plano-assistir'
 
 // componentes
 import Menu from './principais/menu'
+import NavBar from '../components/navBar'
 
 const AppStack = createStackNavigator()
 const Tab = createBottomTabNavigator()
@@ -53,7 +55,38 @@ const MyTheme = {
 };
 
 export interface TabkNavigatorProps{
-    navigation: StackNavigationProp<RootStackPagesProps, 'home'>
+    //navigation: StackNavigationProp<RootStackPagesProps, 'home'>
+    navigation: any
+}
+
+export function DrawerNavigator() {
+    const Drawer = createDrawerNavigator();
+
+    return (
+        <Drawer.Navigator
+                drawerType={'front'}
+                backBehavior={'none'}
+            >
+                <Drawer.Screen 
+                    name="Home" 
+                    component={TabNavigator}
+                    options={{
+                        drawerIcon: config => <FontAwesome5 name="download" size={20} color="white" focused={true} />
+                    }}/>
+                <Drawer.Screen 
+                    name="Sobre" 
+                    component={Sobre}
+                    options={{
+                        drawerIcon: config => <FontAwesome5 name="info-circle" size={20} color="white" focused={true} />
+                    }}/>
+                <Drawer.Screen 
+                    name="Configurações"
+                    component={Configuracoes}
+                    options={{
+                        drawerIcon: config =><Ionicons name="settings" size={20} color="white"/>
+                    }}/>
+            </Drawer.Navigator>
+  )
 }
 
 export function TabNavigator(props: TabkNavigatorProps){
@@ -113,13 +146,11 @@ export function TabNavigator(props: TabkNavigatorProps){
                 }}
                 />
                 <Tab.Screen
-                name={pagesNames.menu}
-                children={()=>{
-                    return <Menu></Menu>}
-                }
+                name={pagesNames.perfil}
+                component={Perfil}
                 options={{
                     tabBarIcon: ({color, size} : barProps) => (
-                    <Ionicons name="md-menu" size={size} color={color} />
+                    <Ionicons name="person" size={size} color={color} />
                     ),
                 }}
                 />
@@ -135,9 +166,12 @@ export interface StackNavigatorProps{
 export function StackNavigator(props: StackNavigatorProps){
     return (
         <NavigationContainer theme={MyTheme}>
-            <AppStack.Navigator screenOptions={{ headerShown: false }} initialRouteName={props.initialRouteName}>
+            <AppStack.Navigator screenOptions={{ 
+                headerShown: true,  
+                headerLeft: () => (<NavBar/>)}} 
+                initialRouteName={props.initialRouteName}>
                 <AppStack.Screen name={pagesNames.login} component={Login}/>
-                <AppStack.Screen name={pagesNames.home} component={TabNavigator}/>
+                <AppStack.Screen name={pagesNames.home} component={DrawerNavigator}/>
                 <AppStack.Screen name={pagesNames.perfil} component={Perfil}/>
                 <AppStack.Screen name={pagesNames.pesquisa} component={Pesquisa}/>
                 <AppStack.Screen name={pagesNames.animePage} component={AnimePage}/>
