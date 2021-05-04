@@ -27,6 +27,7 @@ export type AnimePageProps = {
 export default function AnimePage(props: AnimePageProps){
 
     const anime = props.route.params.anime
+    const [scrollNumOfEpisodes, setScrollNumOfEpisodes] = useState(anime.num_episodes > 20 ? 20 : anime.num_episodes)
     const [isWatchListVisible, setWatchListVisible] = useState(false);
     const [isLinkManagerVisible, setLinkManagerVisible] = useState(false);
     const [currentModalEpisode, setCurrentModalEpisode] = useState(1)
@@ -38,11 +39,20 @@ export default function AnimePage(props: AnimePageProps){
         databaseId: ''
     })
     
-    const episodeList = []
-    for(let episode=1; episode<=anime.num_episodes; episode++){
-        episodeList.push(
-            <EpisodeCard episodeNumber={episode} key={episode} setWatchListVisible={showEpisodeList} setLinkManagerVisible={showLinkManager}/>
-        )
+    const episodeList = [] as React.ReactElement[]
+
+    function getEpisodeListElements(currentNumOfEpisodes: number){
+        
+        for(let episode=episodeList.length + 1; episode<=currentNumOfEpisodes; episode++){
+            episodeList.push(
+                <EpisodeCard episodeNumber={episode} key={episode} setWatchListVisible={showEpisodeList} setLinkManagerVisible={showLinkManager}/>
+            )
+        }
+        return episodeList
+    }
+
+    function isCloseToBottom({layoutMeasurement, contentOffset, contentSize}: any){
+        return layoutMeasurement.height + contentOffset.y >= contentSize.height - 200;
     }
 
     async function showLinkManager(episodeNumber: number){
@@ -64,7 +74,7 @@ export default function AnimePage(props: AnimePageProps){
         setCurrentModalEpisodeList(episodeList)
         setWatchListVisible(true)
     }
-
+    
     async function getEpisodeLinks(episodeNumber: number){
         const episodes = await AnimowoApi.getAnimeLinks(anime.id, episodeNumber, user.id)
         return episodes.map((episode, index) => {
@@ -130,8 +140,14 @@ export default function AnimePage(props: AnimePageProps){
                     <Text style={PageStyle.titleStyle} ellipsizeMode='tail' numberOfLines={5}>{anime.title}</Text>
                 </View>
             </View>
-            <ScrollView>
-                { episodeList }
+            <ScrollView
+                onScroll={({nativeEvent})=>{
+                    if(isCloseToBottom(nativeEvent)){
+                        const newNumOfEpisodes = ((scrollNumOfEpisodes + 20) > anime.num_episodes ? anime.num_episodes : (scrollNumOfEpisodes + 20))
+                        setScrollNumOfEpisodes(newNumOfEpisodes);
+                    }
+                }}>
+                { getEpisodeListElements(scrollNumOfEpisodes) }
             </ScrollView>
         </View>
     )

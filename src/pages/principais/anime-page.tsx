@@ -138,7 +138,7 @@ export default function AnimePage(props: AnimePageProps){
                     <View style={PageStyle.editAnimeSelectorContainer}>
                         <Selector options={[
                             {text: "Sem Lista", value: ""},
-                            {text: "Completado", value: "completed"},
+                            {text: "Completo", value: "completed"},
                             {text: "Assistindo", value: "watching"},
                             {text: "Desistido", value: "dropped"},
                             {text: "Esperando", value: "on_hold"},

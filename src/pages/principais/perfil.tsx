@@ -6,12 +6,15 @@ import {
     StyleSheet} from 'react-native';
 
 import NavBar from '../../components/navBar';
-import AnimeHorizontalListTest from '../../components/anime-horizontal-list-test';
 import Button from '../../components/button';
 import ProfileCard from '../../components/profile-card';
 import { malApi } from '../../services/global';
 import { user } from '../../services/global'
 import { RootStackNavigator } from '../rotas/rootNavigators/rootStackNavigator'
+import AnimeHorizontalList from '../../components/anime-horizontal-list';
+import AnimeCard from '../../components/anime-card';
+
+const defaultImage = 'https://idealservis.com.br/portal/wp-content/uploads/2014/07/default-placeholder.png';
 
 export default function Perfil(){
 
@@ -22,6 +25,7 @@ export default function Perfil(){
         qtdAssistindo: 0,
         qtdPlanoAssistir: 0
     })
+    const [animeList, setAnimeList] = useState([] as {name: string, pic: string, id: number}[])
     
     async function logoff(){
         await malApi.logoff()
@@ -42,8 +46,27 @@ export default function Perfil(){
         }catch(error){ }
     }
 
+    async function getLastUpdatedAnimes(){
+        const response = await malApi.getUserList('list_updated_at', undefined, undefined, undefined, 20)
+        const newList = response?.data.map(anime => ({
+            id: anime.node.id,
+            name: anime.node.title,
+            pic: anime.node.main_picture ? anime.node.main_picture.medium : defaultImage
+        }))
+
+        if(newList)
+            setAnimeList(newList)
+    }
+
+    function createAnimeList(){
+        return animeList.map((anime, index) => (
+            <AnimeCard key={index} id={ anime.id } image={{ uri: anime.pic }} name={ anime.name }/>
+        ))
+    }
+
     useEffect(()=>{
         getUser()
+        getLastUpdatedAnimes()
     }, [])
 
     return (
@@ -59,7 +82,9 @@ export default function Perfil(){
                         qtdPlanoAssistir={state.qtdPlanoAssistir}
                         />
                     <Text style={PerfilStyle.textStyle}> Últimos Animes adicionados</Text>
-                    <AnimeHorizontalListTest/>
+                    <AnimeHorizontalList>
+                        {createAnimeList()}
+                    </AnimeHorizontalList>
                     <View style={PerfilStyle.buttonStyle}>
                         <Button onPress={logoff} title={"SAIR"}></Button>
                     </View>
