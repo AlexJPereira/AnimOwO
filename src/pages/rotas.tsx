@@ -1,14 +1,15 @@
 import React from 'react'
-import {Text} from 'react-native'
-import { NavigationContainer } from '@react-navigation/native'
+import { Text, TouchableOpacity } from 'react-native'
+import { NavigationContainer, useNavigation } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'; 
 import { createStackNavigator, StackNavigationProp } from '@react-navigation/stack'
 import { Ionicons } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons'; 
 import { FontAwesome5 } from '@expo/vector-icons';
 
-import { RootStackPagesProps, setRootStackNavigator } from './rootStackNavigator'
-import { createDrawerNavigator, DrawerItem } from '@react-navigation/drawer';
+import { RootStackPagesProps, setRootStackNavigator, RootStackNavigator } from './rootStackNavigator'
+import { RootDrawerNavigator, setRootDrawerNavigator } from './rootDrawerNavigator'
+import { createDrawerNavigator, DrawerItem, DrawerNavigationProp } from '@react-navigation/drawer';
 
 // estilos
 import pagesNames from './pagesNames'
@@ -55,6 +56,23 @@ export interface TabkNavigatorProps{
     navigation: StackNavigationProp<RootStackPagesProps, 'home'>
 }
 
+function TestButton(){
+    return (
+        <TouchableOpacity style={{
+            height: 50,
+            backgroundColor: 'white',
+            marginTop: 10,
+            justifyContent: 'center',
+            alignItems: 'center'
+        }} onPress={()=>{
+                RootStackNavigator.navigate('perfil')
+                RootDrawerNavigator.closeDrawer()
+            }}>
+            <Text>test</Text>
+        </TouchableOpacity>
+    )
+}
+
 export function DrawerNavigator(props: StackNavigatorProps) {
     const Drawer = createDrawerNavigator();
 
@@ -63,9 +81,10 @@ export function DrawerNavigator(props: StackNavigatorProps) {
             <Drawer.Navigator
                 drawerType={'front'}
                 backBehavior={'none'}
-                drawerContent={()=><Text>test</Text>}
-                drawerPosition={'right'}>
-
+                drawerContent={TestButton}
+                drawerPosition={'right'}
+                edgeWidth={0}>
+                
                 <Drawer.Screen 
                     name="Home" 
                     options={{
@@ -150,10 +169,15 @@ export function TabNavigator(props: TabkNavigatorProps){
 }
 
 export interface StackNavigatorProps{
-    initialRouteName: "home" | "login"
+    initialRouteName: "home" | "login",
+    //navigation?: DrawerNavigationProp<any>
 }
 
 export function StackNavigator(props: StackNavigatorProps){
+    // stack navigator e aberto pelo drawer, entao setaremos o drawer em uma variavel global
+    const navigator = useNavigation() as DrawerNavigationProp<any>
+    setRootDrawerNavigator(navigator)
+
     return (
         <NavigationContainer theme={MyTheme} independent={true}>
             <AppStack.Navigator screenOptions={{ headerShown: false }} 

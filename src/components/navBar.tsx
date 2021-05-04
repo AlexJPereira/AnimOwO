@@ -4,6 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native';
 import { StyleSheet } from 'react-native';
 import { RootStackNavigator } from '../pages/rootStackNavigator';
+import { RootDrawerNavigator } from '../pages/rootDrawerNavigator'
 
 import Drawer from '../components/menu'; 
 
@@ -20,7 +21,7 @@ export default function NavBar(){
                 <Ionicons name="search" size={24} color="white"/>
             </TouchableOpacity>
             <Image style={navBarStyle.logo} source={LogoCompleto}></Image>
-            <TouchableOpacity onPress={()=>{  }}>
+            <TouchableOpacity onPress={()=>{ RootDrawerNavigator.toggleDrawer() }}>
                 <Ionicons name="md-menu" size={24} color={'white'} />
             </TouchableOpacity>
         </View>
