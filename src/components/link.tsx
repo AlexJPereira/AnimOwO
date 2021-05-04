@@ -1,6 +1,6 @@
 import React from 'react'
 import { Text, GestureResponderEvent } from 'react-native'
-import { StyleSheet, TouchableOpacity} from 'react-native'
+import { TouchableOpacity } from 'react-native'
 
 import textStyle from '../styles/text'
 

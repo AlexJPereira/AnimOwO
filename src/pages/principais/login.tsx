@@ -7,7 +7,6 @@ import { malApi } from '../../services/global'
 import textStyle from '../../styles/text'
 import Button from '../../components/button'
 import Link from '../../components/link'
-import { isLoggedIn } from '../../services/mal-api/login'
 
 const LogoCompleto = require('../../app-assets/logo/Logo-OWO-MAL.png')
 

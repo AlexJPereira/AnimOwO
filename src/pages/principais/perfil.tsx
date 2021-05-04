@@ -8,11 +8,10 @@ import {
 import NavBar from '../../components/navBar';
 import AnimeHorizontalListTest from '../../components/anime-horizontal-list-test';
 import Button from '../../components/button';
-import pagesNames from '../pagesNames';
 import ProfileCard from '../../components/profile-card';
 import { malApi } from '../../services/global';
 import { user } from '../../services/global'
-import { RootStackNavigator } from '../../pages/rootStackNavigator'
+import { RootStackNavigator } from '../rotas/rootNavigators/rootStackNavigator'
 
 export default function Perfil(){
 

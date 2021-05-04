@@ -8,8 +8,8 @@ import {
     Dimensions } from 'react-native';
 
 import { RouteProp } from '@react-navigation/native';
-import { RootStackPagesProps } from '../rootStackNavigator';
-import { RootStackNavigator } from '../rootStackNavigator';
+import { RootStackPagesProps } from '../rotas/rootNavigators/rootStackNavigator';
+import { RootStackNavigator } from '../rotas/rootNavigators/rootStackNavigator';
 import Button from '../../components/button';
 import NavBar from '../../components/navBar';
 import Selector from '../../components/selector'

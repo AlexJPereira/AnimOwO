@@ -9,7 +9,7 @@ import {
 import { ScrollView } from 'react-native-gesture-handler';
 
 import { RouteProp } from '@react-navigation/native';
-import { RootStackPagesProps } from '../rootStackNavigator';
+import { RootStackPagesProps } from '../rotas/rootNavigators/rootStackNavigator';
 import * as AnimowoApi from '../../services/animowo-api'
 import { VoteType } from '../../services/animowo-api/interfaces'
 import { malApi, user } from '../../services/global';

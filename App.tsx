@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StackNavigator, DrawerNavigator } from './src/pages/rotas'
-import { View } from 'react-native'
+import { DrawerNavigator } from './src/pages/rotas/drawerNavigator'
 
 import MalApi from './src/services/mal-api'
 import { setMalApi, malApi } from './src/services/global'

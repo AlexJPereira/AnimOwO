@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactNative from 'react-native'
 import { View, Image, Text, TouchableOpacity, StyleSheet } from 'react-native'
-import { RootStackNavigator } from '../pages/rootStackNavigator'
+import { RootStackNavigator } from '../pages/rotas/rootNavigators/rootStackNavigator'
 
 export interface AnimeCardProps {
     image: ReactNative.ImageSourcePropType

@@ -1,20 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native';
 import { StyleSheet } from 'react-native';
-import { RootStackNavigator } from '../pages/rootStackNavigator';
-import { RootDrawerNavigator } from '../pages/rootDrawerNavigator'
-
-import Drawer from '../components/menu'; 
+import { RootStackNavigator } from '../pages/rotas/rootNavigators/rootStackNavigator';
+import { RootDrawerNavigator } from '../pages/rotas/rootNavigators/rootDrawerNavigator'
 
 const LogoCompleto = require('../app-assets/logo/Logo-Completo.png');
-//const barHeight = StatusBar.currentHeight || 24;
 
 export default function NavBar(){
-
-    const [shouldShow, setShouldShow] = useState(false);
-
     return(
         <View style={navBarStyle.navBar}>
             <TouchableOpacity onPress={() => {RootStackNavigator.navigate('pesquisa')}}>

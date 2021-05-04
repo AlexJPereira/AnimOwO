@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, ImageSourcePropType, Text, Image, StyleSheet, TouchableOpacity } from 'react-native'
 
-import { RootStackNavigator } from '../pages/rootStackNavigator'
+import { RootStackNavigator } from '../pages/rotas/rootNavigators/rootStackNavigator'
 
 import color from '../styles/color'
 import textStyle from '../styles/text'

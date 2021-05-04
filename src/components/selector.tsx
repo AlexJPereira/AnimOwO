@@ -3,7 +3,6 @@ import { Picker } from '@react-native-picker/picker';
 import { StyleSheet, View } from 'react-native'
 
 import colorStyle from '../styles/color'; 
-import { listStatus } from '../services/mal-api/interfaces'
 
 interface SelectorProps {
     options: {text: string, value: any}[],

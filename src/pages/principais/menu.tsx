@@ -7,7 +7,7 @@ import {
     Dimensions
 } from 'react-native';
 
-import { RootStackNavigator } from '../rootStackNavigator';
+import { RootStackNavigator } from '../rotas/rootNavigators/rootStackNavigator';
 import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 
