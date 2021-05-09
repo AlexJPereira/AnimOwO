@@ -3,14 +3,22 @@ import ReactNative from 'react-native'
 import { View, Image, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import { RootStackNavigator } from '../pages/rotas/rootNavigators/rootStackNavigator'
 
+import NoImage from './loading/noImageOnDetails'
+
 export interface AnimeCardProps {
     image: ReactNative.ImageSourcePropType
     id: number
     name?: string,
+    isLoading?: boolean
 }
 
 export default function AnimeCard(props: AnimeCardProps){
-    const AnimeName = () => {
+
+    function goToAnimePage(){
+        RootStackNavigator.push('anime-page', {id: props.id})
+    }
+
+    function AnimeName(){
         if(props.name) return(
             <View style={animeCardStyle.animeNameContainer}>
                 <Text style={animeCardStyle.animeNameText} ellipsizeMode='tail' numberOfLines={2}>{props.name}</Text>
@@ -21,8 +29,11 @@ export default function AnimeCard(props: AnimeCardProps){
 
     return(
         <TouchableOpacity 
-            onPress={()=>RootStackNavigator.push('anime-page', {id: props.id})} style={animeCardStyle.animeCard}>
-            <Image style={animeCardStyle.animeImage} source={props.image}/>
+            onPress={props.isLoading ? ()=>{} : goToAnimePage} style={animeCardStyle.animeCard}>
+            {props.isLoading ? 
+                <NoImage/>
+                : <Image style={animeCardStyle.animeImage} source={props.image}/>
+            }
             <AnimeName/>
         </TouchableOpacity>
     )
@@ -30,7 +41,6 @@ export default function AnimeCard(props: AnimeCardProps){
 
 const animeCardStyle = StyleSheet.create({
     animeCard: {
-        backgroundColor: 'white',
         height: 138,
         width: 90,
         borderRadius: 15,

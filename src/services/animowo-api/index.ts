@@ -1,12 +1,14 @@
 import api from './axios'
 import {
     postAnimeParams, editAnimeParams, VoteType,
-    getAnimeResponse, postAnimeResponse, editAnimeResponse, deleteAnimeResponse, voteAnimeResponse, recommendationResponse
+    getAnimeResponse, postAnimeResponse, editAnimeResponse, deleteAnimeResponse, voteAnimeResponse, recommendationResponse, getFavoriteListResponse
 } from './interfaces'
 import * as Store from '../store'
+import { user } from '../global'
 
 async function getHeaderToken(){
     const token = await Store.getValue('acessToken')
+    
     if(!token)
         return undefined
 
@@ -84,7 +86,39 @@ export async function getRecommendations(userId: number){
 }
 
 export async function getFavorites(userId: number){
-    return []
+    const header = await getHeaderToken()
+    if(!header)
+        return
+    
+    const response = await api.get(`/favorite/${userId}`, header)
+    return response.data as getFavoriteListResponse
+}
+
+export async function postFavorite(userId: number, animeId: number){
+    const header = await getHeaderToken()
+    if(!header)
+        return
+    
+    const response = await api.post(`/favorite/`, {
+        userId,
+        animeId
+    }, header)
+    return response.data ? true : false
+}
+
+export async function deleteFavorite(userId: number, animeId: number){
+    const header = await getHeaderToken()
+    if(!header)
+        return
+    
+    const response = await api.delete(`/favorite/`, {
+        ...header,
+        data: {
+            userId,
+            animeId
+        }
+    })
+    return response.data ? true : false
 }
 
 
@@ -92,7 +126,9 @@ async function test(){
     const userId = 4811263 // Wykke
     const animeId = 40571 // Majo no Tabitabi  4073
     
-    const resp = await getRecommendations(userId)
+    //const resp = await postFavorite(userId, 123456)
+    const resp = await getFavorites(userId)
+    //const resp = await deleteFavorite(userId, 123456)
     console.log(resp)
 }
 

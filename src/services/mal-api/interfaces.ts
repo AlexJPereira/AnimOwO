@@ -39,7 +39,7 @@ export type genericListResponse = {
     }
 }
 export type seasonalListResponse = {
-    data: genericAnimeNode[],
+    data: { node: animeDetailsResponse }[],
     paging: {
         next: string
     },
@@ -196,14 +196,7 @@ export type genericAnimeNode = {
     },
 }
 export type rankingNode = {
-    node: {
-        id: number,
-        main_picture: {
-          large: string,
-          medium: string,
-        },
-        title: string,
-    },
+    node: animeDetailsResponse,
     ranking: {
       "rank": number,
     },

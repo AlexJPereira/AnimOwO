@@ -15,8 +15,12 @@ import NavBar from '../../components/navBar';
 import Selector from '../../components/selector'
 
 import { malApi } from '../../services/global'
+import * as animowoApi from '../../services/animowo-api'
+import { user } from '../../services/global'
 import { animeDetailsInitialValues, animeDetailsResponse, listStatus } from "../../services/mal-api/interfaces";
+import { FontAwesome } from '@expo/vector-icons';
 
+import colors from '../../styles/color'
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -46,9 +50,14 @@ export default function AnimePage(props: AnimePageProps){
     const [state, setState] = useState(initialValues)
     const [selectedList, setSelectedList] = useState("" as (listStatus | ""))
     const [userScore, setUserScore] = useState(0 as possibleScores)
+    const [isFavorite, setIsFavorite] = useState(false)
     
     async function getAnimeDetails(){
         const anime = await malApi.getAnimeDetails(params.id)
+
+        const favoriteList = await animowoApi.getFavorites(user.id)
+        const favorite = favoriteList?.anime_list.find((anime) => anime === params.id) ? true : false
+        setIsFavorite(favorite)
         
         if(anime && anime?.main_picture === undefined)
             anime.main_picture = {
@@ -80,6 +89,15 @@ export default function AnimePage(props: AnimePageProps){
             score: value ? value : undefined
         })
         console.log(response ? `alterado nota para ${value}` : `erro, nao foi alterado`)
+    }
+
+    async function toggleFavorite(){
+        if(isFavorite)
+            animowoApi.deleteFavorite(user.id, params.id)
+        else
+            animowoApi.postFavorite(user.id, params.id)
+        
+        setIsFavorite(!isFavorite)
     }
 
     function getScoreObject(){
@@ -119,6 +137,12 @@ export default function AnimePage(props: AnimePageProps){
                     <View style={PageStyle.viewStyle}>
                         <View style={PageStyle.nameField}>
                             <Text style={PageStyle.titleStyle} ellipsizeMode='tail' numberOfLines={2}>{state.title}</Text>
+                            <FontAwesome
+                                name={isFavorite ? "heart" : "heart-o"}
+                                size={25}
+                                color={colors.corPrincipal.color}
+                                style={PageStyle.heartIcon}
+                                onPress={toggleFavorite}/>
                         </View>
                         <Text style={PageStyle.noteStyle}>{state.mean} {starEmoji}</Text>
                         <Text style={PageStyle.episodesStyle}>{state.num_episodes} Episódios</Text>
@@ -168,11 +192,11 @@ const PageStyle = StyleSheet.create({
         paddingBottom: screenHeight-windowHeight+30,
     },
     viewStyle:{
-        maxWidth: windowWidth/2-10,
-        paddingLeft: 10
+        maxWidth: windowWidth-104*1.25-20,
+        paddingLeft: 10,
     },
     cardStyle:{
-        flexDirection: 'row'
+        flexDirection: 'row',
     },
     imageStyle:{
         width: 104*1.25, 
@@ -180,6 +204,8 @@ const PageStyle = StyleSheet.create({
     },
     nameField:{
         justifyContent: 'space-between',
+        alignItems: 'center',
+        width: '100%',
         flexDirection: 'row'
     }, 
     buttonField:{
@@ -197,6 +223,7 @@ const PageStyle = StyleSheet.create({
         lineHeight: 23,
         letterSpacing: 1,
         color: '#FFFFFF',
+        maxWidth: '70%'
     },
     noteStyle:{
         textAlignVertical: 'bottom',
@@ -250,5 +277,8 @@ const PageStyle = StyleSheet.create({
     },
     editAnimeSelectorContainer: {
         flexDirection: 'row',
+    },
+    heartIcon: {
+        paddingRight: 10
     }
 })

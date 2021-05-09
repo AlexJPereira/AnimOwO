@@ -13,10 +13,17 @@ import { user } from '../../services/global'
 import { RootStackNavigator } from '../rotas/rootNavigators/rootStackNavigator'
 import AnimeHorizontalList from '../../components/anime-horizontal-list';
 import AnimeCard from '../../components/anime-card';
+import { RefreshControl } from 'react-native';
 
 const defaultImage = 'https://idealservis.com.br/portal/wp-content/uploads/2014/07/default-placeholder.png';
 
 export default function Perfil(){
+
+    const defaultAnime = {
+        name: '',
+        pic: '',
+        id: 0
+    }
 
     const [state, setState] = useState({
         username: "Anonimo",
@@ -25,7 +32,9 @@ export default function Perfil(){
         qtdAssistindo: 0,
         qtdPlanoAssistir: 0
     })
-    const [animeList, setAnimeList] = useState([] as {name: string, pic: string, id: number}[])
+    const [animeList, setAnimeList] = useState([defaultAnime, defaultAnime, defaultAnime, defaultAnime] as {name: string, pic: string, id: number}[])
+    const [isLoading, setIsLoading] = useState(true)
+    const [reloading, setReloading] = useState(false)
     
     async function logoff(){
         await malApi.logoff()
@@ -56,12 +65,20 @@ export default function Perfil(){
 
         if(newList)
             setAnimeList(newList)
+        setIsLoading(false)
     }
 
     function createAnimeList(){
         return animeList.map((anime, index) => (
-            <AnimeCard key={index} id={ anime.id } image={{ uri: anime.pic }} name={ anime.name }/>
+            <AnimeCard key={index} id={ anime.id } image={{ uri: anime.pic }} name={ anime.name } isLoading={isLoading}/>
         ))
+    }
+
+    async function reloadPage(){
+        setReloading(true)
+        await getUser()
+        await getLastUpdatedAnimes()
+        setReloading(false)
     }
 
     useEffect(()=>{
@@ -72,7 +89,9 @@ export default function Perfil(){
     return (
         <View> 
             <NavBar/>
-            <ScrollView>
+            <ScrollView refreshControl={ 
+                <RefreshControl refreshing={reloading} onRefresh={reloadPage}/>
+            }>
                 <View style={PerfilStyle.screenStyle}>
                     <Text style={PerfilStyle.textStyle}> Bem vindo, {state.username}</Text>
                     <ProfileCard 

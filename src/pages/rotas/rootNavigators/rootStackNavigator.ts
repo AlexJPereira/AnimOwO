@@ -12,6 +12,10 @@ export type RootStackPagesProps = {
     'configuracoes': any, 
     'pesquisa': any
     'login': any,
+    'recomendados': any,
+    'assistindo': any,
+    'em-alta': any,
+    'temporada': any
 } 
 
 

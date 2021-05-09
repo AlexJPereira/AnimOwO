@@ -23,6 +23,9 @@ import Sobre from '../mais/sobre'
 import Assistindo from '../listas/assistindo'
 import Favoritos from '../listas/favoritos'
 import PlanoAssistir from '../listas/plano-assistir'
+import Recomendados from '../listas/recomendados'
+import EmAlta from '../listas/emAlta'
+import Temporada from '../listas/temporada'
 
 export interface StackNavigatorProps{
     initialRouteName: "home" | "login",
@@ -51,6 +54,9 @@ export function StackNavigator(props: StackNavigatorProps){
                 <AppStack.Screen name={stackNavigatorPages.assistindo} component={Assistindo}/>
                 <AppStack.Screen name={stackNavigatorPages.favoritos} component={Favoritos}/>
                 <AppStack.Screen name={stackNavigatorPages.planoAssistir} component={PlanoAssistir}/>
+                <AppStack.Screen name={stackNavigatorPages.recomendados} component={Recomendados}/>
+                <AppStack.Screen name={stackNavigatorPages.emAlta} component={EmAlta}/>
+                <AppStack.Screen name={stackNavigatorPages.temporada} component={Temporada}/>
             </AppStack.Navigator>
         </NavigationContainer>
     )
@@ -70,7 +76,10 @@ export const stackNavigatorPages: pagesLibrary = {
     assistindo: "assistindo",
     favoritos: "favoritos",
     planoAssistir: "plano-assistir",
-    menu: "menu"
+    menu: "menu",
+    recomendados: "recomendados",
+    emAlta: "em-alta",
+    temporada: "temporada"
 }
 
 const ContainerTheme = {

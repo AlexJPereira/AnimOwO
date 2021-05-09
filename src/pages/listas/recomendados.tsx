@@ -1,21 +1,21 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, StyleSheet } from 'react-native'
 
 import ListaPadrao from '../../components/lista-padrao'
 import NavBar from '../../components/navBar'
 import AnimeCardDetails from '../../components/anime-card-details'
-import { malApi } from '../../services/global'
+import { malApi, user } from '../../services/global'
+import { getRecommendations } from '../../services/animowo-api'
 
-
-export default function PlanoAssistir(){
+export default function Recomendados(){
 
     const defaultAnime = {
         id: 0,
         animeTitle: '', 
         animePic: 'https://idealservis.com.br/portal/wp-content/uploads/2014/07/default-placeholder.png', 
-        episodesNumber: 0
+        episodesNumber: 0,
     }
-
+    
     const [state, setState] = useState({
         assistindo: [defaultAnime, defaultAnime, defaultAnime]
     })
@@ -23,20 +23,32 @@ export default function PlanoAssistir(){
     const [reloading, setReloading] = useState(false)
 
     async function getUserList(){
-        const response = await malApi.getUserList('anime_title', 'plan_to_watch')
-        
-        setState({assistindo: [defaultAnime]})
-        setIsLoading(false)
-        
-        if(response)
-            setState({
-                assistindo: response.data.map((element) => ({
-                    id: element.node.id,
-                    animeTitle: element.node.title,
-                    animePic: element.node.main_picture.medium,
-                    episodesNumber: element.node.num_episodes,
-                }))
+        let recomendadosResponse
+        try{
+            recomendadosResponse = await getRecommendations(user.id)
+        }catch(error){}
+
+        let promises
+        if(recomendadosResponse)
+            promises = recomendadosResponse.predict_list.map(async (recommendationId) => {
+                const animeDetails = await malApi.getAnimeDetails(recommendationId)
+                return ({
+                    id: animeDetails ? animeDetails.id : 0,
+                    animePic: animeDetails ? animeDetails.main_picture.medium : '',
+                    animeTitle: animeDetails ? animeDetails.title : '',
+                    episodesNumber: animeDetails ? animeDetails.num_episodes : 0
+                })
             })
+        const recomendados = await Promise.all(promises ? promises : [])
+
+        if(recomendados)
+            setState({
+                assistindo: recomendados
+            })
+        else
+            setState({assistindo: [defaultAnime]})
+
+        setIsLoading(false)
     }
 
     async function reloadPage(){
@@ -48,19 +60,19 @@ export default function PlanoAssistir(){
     useEffect(()=>{
         getUserList()
     }, [])
-
+    
     return (
         <View style={style.page}>
             <NavBar/>
             <View style={style.listContainer}>
-                <ListaPadrao name="Plano de assistir" refreshState={reloading} refreshPageFunction={reloadPage}>
+                <ListaPadrao name="Recomendados" refreshState={reloading} refreshPageFunction={reloadPage}>
                     {
                         state.assistindo.map((element, index) => 
                             <AnimeCardDetails key={index}
-                                id={element.id}
+                                id = {element.id}
                                 animeName={element.animeTitle} 
                                 animeImage={{ uri: element.animePic }} 
-                                details={`${element.episodesNumber} Episódios`}
+                                details={`${element.episodesNumber} episódios`}
                                 isLoading={isLoading}/>
                         )
                     }
@@ -69,6 +81,7 @@ export default function PlanoAssistir(){
         </View>
     )
 }
+
 
 const style = StyleSheet.create({
     page: {

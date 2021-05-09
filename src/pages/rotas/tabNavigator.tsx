@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { NavigationContainer } from "@react-navigation/native"
 import { StackNavigationProp } from "@react-navigation/stack"
@@ -13,6 +13,7 @@ import Perfil from '../principais/perfil'
 import Assistindo from '../listas/assistindo'
 import Favoritos from '../listas/favoritos'
 import PlanoAssistir from '../listas/plano-assistir'
+import { BackHandler, ToastAndroid } from "react-native"
 
 
 interface barProps {
@@ -27,6 +28,32 @@ export interface TabkNavigatorProps{
 export function TabNavigator(props: TabkNavigatorProps){
     setRootStackNavigator(props.navigation)
     const Tab = createBottomTabNavigator()
+
+    const exitMessage = "Aperte novamente para sair."
+    let exitApp = 0
+
+    function backAction() {
+        setTimeout(() => {
+            exitApp = 0;
+        }, 2000);
+    
+        if (exitApp === 0) {
+            exitApp++
+    
+            ToastAndroid.show(exitMessage, ToastAndroid.SHORT);
+        } else if (exitApp >= 1) {
+          BackHandler.exitApp();
+        }
+        return true;
+    };
+
+    useEffect(()=>{
+        const backHandler = BackHandler.addEventListener(
+            'hardwareBackPress',
+            backAction,
+          );
+          return () => backHandler.remove();
+    }, [])
 
     return (
         <NavigationContainer theme={ContainerTheme} independent={true}>
@@ -47,7 +74,7 @@ export function TabNavigator(props: TabkNavigatorProps){
             >
                 <Tab.Screen
                 name={tabNavigatorPages.home}
-                children={() => <Home/>}
+                component={Home}
                 options={{
                     tabBarIcon: ({color, size} : barProps) => (
                     <Ionicons name="home-sharp" size={size} color={color} />

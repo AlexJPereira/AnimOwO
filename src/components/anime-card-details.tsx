@@ -1,6 +1,9 @@
 import React from 'react'
 import { View, ImageSourcePropType, Text, Image, StyleSheet, TouchableOpacity } from 'react-native'
 
+import LoadingImage from './loading/noImageOnDetails'
+import NoText from './loading/noText'
+
 import { RootStackNavigator } from '../pages/rotas/rootNavigators/rootStackNavigator'
 
 import color from '../styles/color'
@@ -10,7 +13,8 @@ interface AnimeCardDeatailsProps{
     animeName: string,
     id: number,
     animeImage: ImageSourcePropType,
-    details: string
+    details: string,
+    isLoading?: boolean
 }
 
 export default function AnimeCardDetails(props: AnimeCardDeatailsProps){
@@ -20,11 +24,17 @@ export default function AnimeCardDetails(props: AnimeCardDeatailsProps){
     }
 
     return(
-        <TouchableOpacity onPress={moveToAnimePage} style={detailsStyle.container}>
-            <Image source={props.animeImage} style={detailsStyle.animeImage}/>
+        <TouchableOpacity onPress={props.isLoading ? ()=>{} : moveToAnimePage} style={detailsStyle.container}>
+            {props.isLoading ? <LoadingImage/> : <Image source={props.animeImage} style={detailsStyle.animeImage}/>}
             <View style={detailsStyle.texts}>
-                <Text style={detailsStyle.animeName}>{props.animeName}</Text>
-                <Text style={detailsStyle.animeDetails}>{props.details}</Text>
+                {props.isLoading ? 
+                    <View style={detailsStyle.noTitleContainer}><NoText/></View> 
+                    : <Text style={detailsStyle.animeName}>{props.animeName}</Text>
+                }
+                {props.isLoading ? 
+                    <View style={detailsStyle.noDetailContainer}><NoText/></View> 
+                    : <Text style={detailsStyle.animeDetails}>{props.details}</Text>
+                }
             </View>
         </TouchableOpacity>
     )
@@ -46,6 +56,7 @@ const detailsStyle = StyleSheet.create({
     texts: {
         paddingLeft: 20,
         justifyContent: 'space-between',
+        alignItems: 'flex-end',
         flex: 1,
     },
     animeName: {
@@ -58,5 +69,14 @@ const detailsStyle = StyleSheet.create({
         ...color.corRosa,
         textAlign: 'right',
         fontSize: 15,
+    },
+    noTitleContainer: {
+        width: '100%',
+        overflow: 'hidden'
+    },
+    noDetailContainer: {
+        width: '50%',
+        overflow: 'hidden'
+        
     }
 })

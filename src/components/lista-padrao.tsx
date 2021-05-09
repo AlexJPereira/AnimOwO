@@ -1,11 +1,13 @@
-import React from 'react'
-import { View, StyleSheet, Text, ScrollView } from 'react-native'
+import React, { useState } from 'react'
+import { View, StyleSheet, Text, ScrollView, RefreshControl } from 'react-native'
 
 import textStyle from '../styles/text'
 
 interface ListaPadraoProps{
     name: string,
-    children?: React.ReactChild[] | React.ReactChild
+    children?: React.ReactChild[] | React.ReactChild,
+    refreshPageFunction?: () => any,
+    refreshState?: boolean
 }
 
 export default function ListaPadrao(props: ListaPadraoProps){
@@ -13,7 +15,10 @@ export default function ListaPadrao(props: ListaPadraoProps){
         <View style={listaPadrao.container}>
             <Text style={listaPadrao.texto}>{props.name}</Text>
             <View style={listaPadrao.scrollContainer}>
-                <ScrollView contentContainerStyle={listaPadrao.lista}>
+                <ScrollView contentContainerStyle={listaPadrao.lista} refreshControl={
+                    (props.refreshPageFunction && props.refreshState !== undefined) ? 
+                        <RefreshControl refreshing={props.refreshState} onRefresh={props.refreshPageFunction}/>
+                        : undefined}>
                     {props.children}
                 </ScrollView>
             </View>

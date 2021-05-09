@@ -32,6 +32,12 @@ export interface recommendationResponse{
     predict_list: number[],
     user_id: number
 }
+export interface getFavoriteListResponse{
+    _id: string,
+    user_id: number,
+    anime_list: number[] 
+}
+
 
 export interface getAnimeParams{}
 export interface postAnimeParams{

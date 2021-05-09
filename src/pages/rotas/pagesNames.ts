@@ -13,6 +13,9 @@ export type pagesNames =
     | "favoritos"
     | "plano-assistir"
     | "menu"
+    | "recomendados"
+    | "em-alta"
+    | "temporada"
 
 export type pagesLibrary = {[key: string]: pagesNames}
 
