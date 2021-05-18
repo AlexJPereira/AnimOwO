@@ -1,6 +1,5 @@
 import { StackNavigationProp } from "@react-navigation/stack";
-import ReactNative from 'react-native'; 
-import { animeDetailsResponse } from "../services/mal-api/interfaces";
+import { animeDetailsResponse } from "../../../services/mal-api/interfaces";
 
 export type RootStackPagesProps = {
     'home': any,
@@ -12,7 +11,13 @@ export type RootStackPagesProps = {
     'sobre': any, 
     'configuracoes': any, 
     'pesquisa': any
-}
+    'login': any,
+    'recomendados': any,
+    'assistindo': any,
+    'em-alta': any,
+    'temporada': any
+} 
+
 
 export var RootStackNavigator: StackNavigationProp<RootStackPagesProps, 'home'>
 

@@ -1,15 +1,16 @@
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement, useState, createRef } from 'react';
 import { 
     View, 
     StyleSheet, 
     Image, 
     Text,
     Dimensions,
+    NativeScrollEvent,
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 
 import { RouteProp } from '@react-navigation/native';
-import { RootStackPagesProps } from '../rootStackNavigator';
+import { RootStackPagesProps } from '../rotas/rootNavigators/rootStackNavigator';
 import * as AnimowoApi from '../../services/animowo-api'
 import { VoteType } from '../../services/animowo-api/interfaces'
 import { malApi, user } from '../../services/global';
@@ -24,9 +25,22 @@ export type AnimePageProps = {
     route: RouteProp<RootStackPagesProps, 'watch-page'>
 }
 
+class ReactPersistentScrollViewRef{
+    public scrollViewRef
+    constructor(){
+        this.scrollViewRef = createRef<ScrollView>()
+    }
+}
+const References = new ReactPersistentScrollViewRef()
+
 export default function AnimePage(props: AnimePageProps){
 
     const anime = props.route.params.anime
+    const maxEpisodes = 80
+    const [scrollNumOfEpisodes, setScrollNumOfEpisodes] = useState({
+        offset: 0,
+        numOfEpisodes: anime.num_episodes > maxEpisodes ? maxEpisodes : anime.num_episodes
+    })
     const [isWatchListVisible, setWatchListVisible] = useState(false);
     const [isLinkManagerVisible, setLinkManagerVisible] = useState(false);
     const [currentModalEpisode, setCurrentModalEpisode] = useState(1)
@@ -37,12 +51,24 @@ export default function AnimePage(props: AnimePageProps){
         link: '',
         databaseId: ''
     })
-    
-    const episodeList = []
-    for(let episode=1; episode<=anime.num_episodes; episode++){
+
+    let episodeList = [] as React.ReactElement[]
+    for(let episodeNumber = 1; episodeNumber<=anime.num_episodes; episodeNumber++){
         episodeList.push(
-            <EpisodeCard episodeNumber={episode} key={episode} setWatchListVisible={showEpisodeList} setLinkManagerVisible={showLinkManager}/>
+            <EpisodeCard episodeNumber={episodeNumber} key={episodeNumber} setWatchListVisible={showEpisodeList} setLinkManagerVisible={showLinkManager}/>
         )
+    }
+
+    function getEpisodeListElements(currentEpisodeOffset: number, currentNumOfEpisodes: number){
+        return episodeList.slice(currentEpisodeOffset, currentNumOfEpisodes)
+    }
+
+    function isCloseToBottom({ layoutMeasurement, contentOffset, contentSize }: NativeScrollEvent){
+        return layoutMeasurement.height + contentOffset.y >= contentSize.height - 1;
+    }
+
+    function isCloseToTop({ contentOffset }: NativeScrollEvent){
+        return contentOffset.y <= 1
     }
 
     async function showLinkManager(episodeNumber: number){
@@ -64,7 +90,7 @@ export default function AnimePage(props: AnimePageProps){
         setCurrentModalEpisodeList(episodeList)
         setWatchListVisible(true)
     }
-
+    
     async function getEpisodeLinks(episodeNumber: number){
         const episodes = await AnimowoApi.getAnimeLinks(anime.id, episodeNumber, user.id)
         return episodes.map((episode, index) => {
@@ -105,6 +131,24 @@ export default function AnimePage(props: AnimePageProps){
     async function vote(voteType: VoteType, dataBaseId: string){
         const response = await AnimowoApi.vote(voteType, user.id, dataBaseId)
     }
+
+    function scrollManager(nativeEvent: NativeScrollEvent){
+        if(isCloseToBottom(nativeEvent) && scrollNumOfEpisodes.numOfEpisodes < anime.num_episodes){
+            const newNumOfEpisodes = 
+                ((scrollNumOfEpisodes.numOfEpisodes+maxEpisodes/2) > anime.num_episodes ?
+                    anime.num_episodes 
+                    : (scrollNumOfEpisodes.numOfEpisodes+maxEpisodes/2))
+            setScrollNumOfEpisodes({offset: newNumOfEpisodes-maxEpisodes, numOfEpisodes: newNumOfEpisodes});
+            References.scrollViewRef.current?.scrollTo({ y: nativeEvent.contentSize.height/2-nativeEvent.layoutMeasurement.height, animated: false })
+            return
+        }
+
+        if(isCloseToTop(nativeEvent) && scrollNumOfEpisodes.offset > 0){
+            const newOffset = ((scrollNumOfEpisodes.offset-maxEpisodes/2) < 0 ? 0 : (scrollNumOfEpisodes.offset-maxEpisodes/2))
+            setScrollNumOfEpisodes({offset: newOffset, numOfEpisodes: newOffset+maxEpisodes})
+            References.scrollViewRef.current?.scrollTo({ y: nativeEvent.contentSize.height/2, animated: false })
+        }
+    }
     
     return (
         <View style={PageStyle.mainStyle}>
@@ -130,8 +174,10 @@ export default function AnimePage(props: AnimePageProps){
                     <Text style={PageStyle.titleStyle} ellipsizeMode='tail' numberOfLines={5}>{anime.title}</Text>
                 </View>
             </View>
-            <ScrollView>
-                { episodeList }
+            <ScrollView ref={References.scrollViewRef}
+                onScroll={({nativeEvent}) =>scrollManager(nativeEvent)}
+                snapToStart={false}>
+                { getEpisodeListElements(scrollNumOfEpisodes.offset, scrollNumOfEpisodes.numOfEpisodes) }
             </ScrollView>
         </View>
     )

@@ -1,12 +1,14 @@
 import api from './axios'
 import {
     postAnimeParams, editAnimeParams, VoteType,
-    getAnimeResponse, postAnimeResponse, editAnimeResponse, deleteAnimeResponse, voteAnimeResponse
+    getAnimeResponse, postAnimeResponse, editAnimeResponse, deleteAnimeResponse, voteAnimeResponse, recommendationResponse, getFavoriteListResponse
 } from './interfaces'
 import * as Store from '../store'
+import { user } from '../global'
 
 async function getHeaderToken(){
     const token = await Store.getValue('acessToken')
+    
     if(!token)
         return undefined
 
@@ -74,25 +76,60 @@ export async function vote(type: VoteType, userId: number, linkId: string){
     return response.data as voteAnimeResponse
 }
 
+export async function getRecommendations(userId: number){
+    const header = await getHeaderToken()
+    if(!header)
+        return
+    
+    const response = await api.get(`/recommendation/${userId}`, header)
+    return response.data as recommendationResponse
+}
+
+export async function getFavorites(userId: number){
+    const header = await getHeaderToken()
+    if(!header)
+        return
+    
+    const response = await api.get(`/favorite/${userId}`, header)
+    return response.data as getFavoriteListResponse
+}
+
+export async function postFavorite(userId: number, animeId: number){
+    const header = await getHeaderToken()
+    if(!header)
+        return
+    
+    const response = await api.post(`/favorite/`, {
+        userId,
+        animeId
+    }, header)
+    return response.data ? true : false
+}
+
+export async function deleteFavorite(userId: number, animeId: number){
+    const header = await getHeaderToken()
+    if(!header)
+        return
+    
+    const response = await api.delete(`/favorite/`, {
+        ...header,
+        data: {
+            userId,
+            animeId
+        }
+    })
+    return response.data ? true : false
+}
+
+
 async function test(){
     const userId = 4811263 // Wykke
     const animeId = 40571 // Majo no Tabitabi  4073
     
-    //const response = await getAnimeLinks(animeId, 1, userId)
-    // const response = await editAnimeLink('6057bb3b66825f4034042b65', {
-    //     link: 'test2',
-    //     userId: userId
-    // })
-    // const response = await deleteAnimeLink('6057aee6badad53d55a05717', userId)
-    // const response = await postAnimeLink({
-    //     animeId,
-    //     link: 'http://youtube.com/1',
-    //     numEpisode: 1,
-    //     userId
-    // })
-    //const response = await vote('down', userId, '6057bb3b66825f4034042b65')
-
-    //console.log(response)
+    //const resp = await postFavorite(userId, 123456)
+    const resp = await getFavorites(userId)
+    //const resp = await deleteFavorite(userId, 123456)
+    console.log(resp)
 }
 
 //test()

@@ -31,7 +31,7 @@ export default function LinkCard(props: LinkCardProps){
     
     function getDate(){
         const date = new Date(props.episode.date)
-        const month = date.getMonth() < 10 ? '0' + date.getMonth() : date.getMonth().toString()
+        const month = (date.getMonth() + 1)  < 10 ? '0' + (date.getMonth() + 1) : (date.getMonth() + 1).toString()
         return `${date.getDate()}/${month}/${date.getFullYear()}`
     }
 

@@ -27,9 +27,9 @@ export async function getUserProfileInfo(this: MalApi){
  * Retorna a lista específica do usuário
  * @param limit Valor máximo é 1000
  */
-export async function getUserList(this: MalApi, status: listStatus, sort: listSort, user: string = '@me', offset?: number, limit?: number){
+export async function getUserList(this: MalApi, sort: listSort, status?: listStatus, user?: string, offset?: number, limit?: number){
     try{
-        const response = await api.get(`/users/${user}/animelist`,{
+        const response = await api.get(`/users/${user ? user : '@me'}/animelist`,{
             params: {
                 status,
                 sort,

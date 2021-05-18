@@ -4,19 +4,27 @@ import {
     ScrollView, 
     Text, 
     StyleSheet} from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 
 import NavBar from '../../components/navBar';
-import AnimeHorizontalListTest from '../../components/anime-horizontal-list-test';
 import Button from '../../components/button';
-import pagesNames from '../pagesNames';
 import ProfileCard from '../../components/profile-card';
 import { malApi } from '../../services/global';
+import { user } from '../../services/global'
+import { RootStackNavigator } from '../rotas/rootNavigators/rootStackNavigator'
+import AnimeHorizontalList from '../../components/anime-horizontal-list';
+import AnimeCard from '../../components/anime-card';
+import { RefreshControl } from 'react-native';
 
+const defaultImage = 'https://idealservis.com.br/portal/wp-content/uploads/2014/07/default-placeholder.png';
 
 export default function Perfil(){
 
-    const navigation = useNavigation()
+    const defaultAnime = {
+        name: '',
+        pic: '',
+        id: 0
+    }
+
     const [state, setState] = useState({
         username: "Anonimo",
         profilePic: "https://i1.wp.com/www.camaragibe.pe.gov.br/wp-content/uploads/2019/04/default-user-male.png?fit=640%2C605&ssl=1",
@@ -24,14 +32,16 @@ export default function Perfil(){
         qtdAssistindo: 0,
         qtdPlanoAssistir: 0
     })
+    const [animeList, setAnimeList] = useState([defaultAnime, defaultAnime, defaultAnime, defaultAnime] as {name: string, pic: string, id: number}[])
+    const [isLoading, setIsLoading] = useState(true)
+    const [reloading, setReloading] = useState(false)
     
     async function logoff(){
         await malApi.logoff()
-        navigation.navigate(pagesNames.login)
+        RootStackNavigator.navigate('login')
     }
 
     async function getUser(){
-        const user = await malApi.getUserProfileInfo()
         try{
             if(user){
                 setState({...state,
@@ -45,14 +55,43 @@ export default function Perfil(){
         }catch(error){ }
     }
 
+    async function getLastUpdatedAnimes(){
+        const response = await malApi.getUserList('list_updated_at', undefined, undefined, undefined, 20)
+        const newList = response?.data.map(anime => ({
+            id: anime.node.id,
+            name: anime.node.title,
+            pic: anime.node.main_picture ? anime.node.main_picture.medium : defaultImage
+        }))
+
+        if(newList)
+            setAnimeList(newList)
+        setIsLoading(false)
+    }
+
+    function createAnimeList(){
+        return animeList.map((anime, index) => (
+            <AnimeCard key={index} id={ anime.id } image={{ uri: anime.pic }} name={ anime.name } isLoading={isLoading}/>
+        ))
+    }
+
+    async function reloadPage(){
+        setReloading(true)
+        await getUser()
+        await getLastUpdatedAnimes()
+        setReloading(false)
+    }
+
     useEffect(()=>{
         getUser()
+        getLastUpdatedAnimes()
     }, [])
 
     return (
         <View> 
             <NavBar/>
-            <ScrollView>
+            <ScrollView refreshControl={ 
+                <RefreshControl refreshing={reloading} onRefresh={reloadPage}/>
+            }>
                 <View style={PerfilStyle.screenStyle}>
                     <Text style={PerfilStyle.textStyle}> Bem vindo, {state.username}</Text>
                     <ProfileCard 
@@ -62,7 +101,9 @@ export default function Perfil(){
                         qtdPlanoAssistir={state.qtdPlanoAssistir}
                         />
                     <Text style={PerfilStyle.textStyle}> Últimos Animes adicionados</Text>
-                    <AnimeHorizontalListTest/>
+                    <AnimeHorizontalList>
+                        {createAnimeList()}
+                    </AnimeHorizontalList>
                     <View style={PerfilStyle.buttonStyle}>
                         <Button onPress={logoff} title={"SAIR"}></Button>
                     </View>
